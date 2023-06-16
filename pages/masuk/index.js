@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
+import { useRouter } from "next/router";
+import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
+import SideBarLogin from "@/components/SideBar/SideBarLogin";
+import Link from "next/link";
 
 const Masuk = () => {
   const [dataUser, setDataUser] = useState({
@@ -8,14 +12,16 @@ const Masuk = () => {
     password: "",
   });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const router = useRouter();
 
-    createUserWithEmailAndPassword(auth, dataUser.email, dataUser.password)
+  const logInWithEmailAndPassword = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, dataUser.email, dataUser.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
+        router.push("/dashboard");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -25,54 +31,80 @@ const Masuk = () => {
   };
 
   return (
-    <div className="container flex justify-center flex-col">
-      <h1>Masuk</h1>
-      <form onSubmit={handleLogin}>
-        <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Your email
-          </label>
-          <input
-            type="email"
-            id="email"
-            onChange={(e) => {
-              setDataUser({ ...dataUser, email: e.target.value });
-            }}
-            value={dataUser.email}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="name@flowbite.com"
-            required=""
-          />
+    <div className="container flex h-[750px]">
+      <SideBarLogin heightValue={800} />
+      <div className="ml-20 mt-10 basis-1/2">
+        <div>
+          <div className="flex justify-end">
+            <p className="text-md text-[#404040]">
+              Belum memiliki akun?
+              <span className="ml-2">
+                <BtnDaftarOutline slug="daftar" namaBtn="Daftar" />
+              </span>
+            </p>
+          </div>
+          <div className="my-10">
+            <h1 className="text-3xl font-semibold tracking-widest text-[#404040]">
+              Selamat Datang di Ayo Nugas!
+            </h1>
+            <h2 className="mt-4 text-2xl font-semibold tracking-widest text-[#888888]">
+              Silahkan Masuk
+            </h2>
+          </div>
+          <form onSubmit={logInWithEmailAndPassword}>
+            <div className="mb-6">
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                onChange={(e) => {
+                  setDataUser({ ...dataUser, email: e.target.value });
+                }}
+                value={dataUser.email}
+                className="block  w-full rounded-full border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-[#F16464] focus:ring-[#F16464]"
+                placeholder="19820100xx@student.upnjatim.ac.id"
+                required
+                autoComplete="off"
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Kata Sandi
+              </label>
+              <input
+                type="password"
+                id="password"
+                onChange={(e) => {
+                  setDataUser({ ...dataUser, password: e.target.value });
+                }}
+                value={dataUser.password}
+                className="block  w-full rounded-full border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-[#F16464] focus:ring-[#F16464]"
+                required
+                autoComplete="off"
+              />
+            </div>
+            <div className="align-center mt-10 flex justify-between">
+              <Link href="#" className="text-[#F05050]">
+                Lupa Kata Sandi?
+              </Link>
+              <button
+                type="submit"
+                className="w-full rounded-full bg-[#F05050] px-10 py-2.5 text-center text-sm font-medium text-white sm:w-auto"
+              >
+                Masuk
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Your password
-          </label>
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => {
-              setDataUser({ ...dataUser, password: e.target.value });
-            }}
-            value={dataUser.password}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            required=""
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Submit
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
