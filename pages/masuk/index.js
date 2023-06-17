@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
-import SideBarLogin from "@/components/SideBar/SideBarLogin";
+import SideBarLogin from "@/components/Sidebar/SideBarLogin";
 import Link from "next/link";
 
 const Masuk = () => {

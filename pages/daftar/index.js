@@ -4,7 +4,7 @@ import { auth, db } from "@/config/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
-import SideBarLogin from "@/components/SideBar/SideBarLogin";
+import SideBarLogin from "@/components/Sidebar/SideBarLogin";
 
 const Daftar = () => {
   const [dataUser, setDataUser] = useState({

@@ -4,46 +4,42 @@ import Notification from "@/assets/icons/Notification";
 import Profile from "@/assets/icons/Profile";
 import { useStateContext } from "@/context/ContextProvider";
 import ArrowDown from "@/assets/icons/ArrowDown";
-
-const NavButton = ({ customFunc, icon }) => {
-  return (
-    <button
-      type="button"
-      onClick={customFunc}
-      className="relative mr-6 rounded-full px-3 text-xl hover:bg-gray-50"
-    >
-      <span className="absolute left-0 right-2 top-1 inline-flex h-6 w-6 rounded-full">
-        {icon}
-      </span>
-    </button>
-  );
-};
+import { useToggle } from "@/context/ContextProvider";
 
 const NavDashboard = () => {
-  const { activeMenu, setActiveMenu } = useStateContext();
-
+  const { toggle } = useToggle();
   return (
-    <div className="relative flex h-16 justify-between p-2 shadow-sm">
-      <NavButton
-        icon={<Menu />}
-        customFunc={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)}
-      />
-
-      <div className="flex">
-        <NavButton icon={<Notification />} />
-        <NavButton icon={<Profile />} />
-        <div className="flex cursor-pointer items-center gap-2 p-1">
-          <p>
-            <span className="text-14 text-gray-400">hai,</span>
-            <span className="text-14 ml-1 font-bold text-gray-400">
-              {" "}
-              Sella{" "}
-            </span>
-          </p>
-          <ArrowDown />
+    <header className="relative z-10 h-16 items-center bg-white shadow md:h-20">
+      <div className="flex-center relative z-10 mx-auto flex h-full flex-col justify-center px-3 text-white">
+        <div className="lg:max-w-68 relative flex w-full items-center pl-1 sm:ml-0 sm:pr-2">
+          <div className="group relative flex h-full w-12 items-center">
+            <button
+              type="button"
+              aria-expanded="false"
+              aria-label="Toggle sidenav"
+              onClick={toggle}
+              className="text-4xl text-gray-700 focus:outline-none"
+            >
+              <Menu />
+            </button>
+          </div>
+          <div className="relative ml-5 mr-0 flex w-full items-center justify-end p-1 text-gray-700 sm:right-auto sm:mr-0">
+            <button className="mr-2">
+              <Notification />
+            </button>
+            <button className="mr-2">
+              <Profile />
+            </button>
+            <div className="mr-2 flex">
+              <p>Hai, Sella</p>
+              <button>
+                <ArrowDown />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

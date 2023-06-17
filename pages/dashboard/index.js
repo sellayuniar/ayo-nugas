@@ -3,8 +3,8 @@ import Layout from "@/widget/Layout";
 const Dashboard = () => {
   return (
     <Layout>
-      <div className="mt-12">
-        <h1>asdasd</h1>
+      <div className="ml-5 mt-5">
+        <h1>Dashboard</h1>
       </div>
     </Layout>
   );

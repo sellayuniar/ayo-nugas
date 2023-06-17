@@ -1,30 +1,20 @@
 import NavDashboard from "@/components/NavDashboard";
-import Sidebar from "@/components/SideBar/Sidebar";
-import { useStateContext } from "@/context/ContextProvider";
+import Sidebar from "@/components/Sidebar/Sidebar";
+
+const style = {
+  container: `bg-gray-100 h-screen overflow-hidden relative`,
+  mainContainer: `flex flex-col h-screen pl-0 w-full lg:space-y-4 lg:w-[calc(100%-16rem)]`,
+  main: `h-screen overflow-auto pb-36 pt-8 px-2 md:pb-8 md:pt-4 md:px-8 lg:pt-0 bg-[#FDECEC]`,
+};
 
 export default function Layout({ children }) {
-  const { activeMenu } = useStateContext();
   return (
-    <div>
-      <div className="relative flex">
-        {activeMenu ? (
-          <div className="sidebar fixed w-72 bg-white shadow">
-            <Sidebar />
-          </div>
-        ) : (
-          <div className="hidden w-0">
-            <Sidebar />
-          </div>
-        )}
-        <div
-          className={`min-h-screen w-full ${
-            activeMenu ? "md:ml-72" : "flex-2"
-          }`}
-        >
-          <div className="fixed w-full bg-white md:static">
-            <NavDashboard />
-          </div>
-          <div className="">{children}</div>
+    <div className={style.container}>
+      <div className="flex items-start">
+        <Sidebar mobilePosition="right" />
+        <div className={style.mainContainer}>
+          <NavDashboard />
+          <main className={style.main}>{children}</main>
         </div>
       </div>
     </div>
