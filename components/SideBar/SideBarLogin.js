@@ -1,5 +1,5 @@
 import React from "react";
-import ArrowLeft from "@/assets/icon/ArrowLeft";
+import ArrowLeft from "@/assets/icons/ArrowLeft";
 import ImgLogin from "@/assets/ImgSvg/ImgLogin";
 import { useRouter } from "next/router";
 
