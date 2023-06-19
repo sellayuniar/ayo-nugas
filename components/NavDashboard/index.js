@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import Menu from "@/assets/icons/Menu";
 import Notification from "@/assets/icons/Notification";
 import Profile from "@/assets/icons/Profile";
 import { useStateContext } from "@/context/ContextProvider";
+import ArrowOut from "@/assets/icons/ArrowOut";
 import ArrowDown from "@/assets/icons/ArrowDown";
 import { useToggle } from "@/context/ContextProvider";
+import Link from "next/link";
+import { auth } from "@/config/firebase";
+import { useRouter } from "next/router";
 
 const NavDashboard = () => {
   const { toggle } = useToggle();
+  const [openProfile, setOpenProfile] = useState(false);
+  const openMenu = () => {
+    setOpenProfile(!openProfile);
+  };
+
+  const router = useRouter();
+
+  const signOutHandler = () => {
+    return auth.signOut().then(router.push("/"));
+  };
+
   return (
     <header className="relative z-10 h-16 items-center bg-white shadow md:h-20">
       <div className="flex-center relative z-10 mx-auto flex h-full flex-col justify-center px-3 text-white">
@@ -32,12 +47,34 @@ const NavDashboard = () => {
             </button>
             <div className="mr-2 flex">
               <p>Hai, Sella</p>
-              <button>
+              <button onClick={openMenu}>
                 <ArrowDown />
               </button>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className={`${
+          openProfile ? "block" : "hidden"
+        }  absolute right-1 top-16 w-56 rounded-lg bg-white py-4 shadow-md dark:bg-[#42464D]`}
+      >
+        <ul className="">
+          <li className="mb-3 px-10 py-3 hover:bg-gray-50">
+            <Link href="/dashboard" className="flex items-center">
+              <span className="mr-2">
+                <Profile />
+              </span>
+              Akun
+            </Link>
+          </li>
+          <li className="flex items-center px-10 py-3 hover:bg-gray-50">
+            <span className="mr-2">
+              <ArrowOut />
+            </span>
+            <span onClick={signOutHandler}>Keluar</span>
+          </li>
+        </ul>
       </div>
     </header>
   );
