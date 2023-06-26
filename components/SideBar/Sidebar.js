@@ -1,7 +1,7 @@
 import SidenavItems from "./Items";
 import SidenavHeader from "./Header";
 import css from "./index.module.css";
-import { useToggle } from "@/context/ContextProvider";
+// import { useToggle } from "@/context/ContextProvider";
 
 const style = {
   mobilePosition: {
@@ -15,12 +15,11 @@ const style = {
 };
 
 export default function Sidebar({ mobilePosition }) {
-  const { open, ref } = useToggle();
+  // const { open, ref } = useToggle();
   return (
     <aside
-      ref={ref}
-      className={`${style.default} ${style.mobilePosition[mobilePosition]} 
-       ${open ? style.open : style.close} ${css.scrollbar}`}
+      // ref={ref}
+      className={`${style.default} ${style.mobilePosition[mobilePosition]}`}
     >
       <div className={style.container}>
         <SidenavHeader />

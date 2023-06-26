@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/config/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
 import SideBarLogin from "@/components/Sidebar/SideBarLogin";
+import { isFormatNPMCorrect, isNPMRegistered } from "@/utils/authUtils";
+import ModalGagal from "@/components/ModalMessage/ModalGagal";
+import Spinner from "@/components/Spinner";
 
 const Daftar = () => {
+  const [allUser, setAllUser] = useState([]);
   const [dataUser, setDataUser] = useState({
     npm: "",
     email: "",
@@ -14,51 +18,94 @@ const Daftar = () => {
     nama_belakang: "",
     password: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const penggunaCollectionRef = collection(db, "pengguna");
 
-  const [confirmPass, setConfirmPass] = useState("");
-
   const router = useRouter();
 
-  // check format npm correct
-  const isFormatNPMCorrect = () => {};
-  // check Npm registed
-  const isNPMRegistered = () => {};
-  // check confirm password valid
-  const validatePassword = () => {};
+  useEffect(() => {
+    const getUsers = async () => {
+      const data = await getDocs(penggunaCollectionRef);
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setAllUser(filteredData);
+    };
+    getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleDaftar = (e) => {
-    e.preventDefault();
+  console.log(allUser);
 
-    createUserWithEmailAndPassword(auth, dataUser.email, dataUser.password)
-      .then(
-        addDoc(penggunaCollectionRef, {
-          npm: dataUser.npm,
-          nama_depan: dataUser.nama_depan,
-          nama_belakang: dataUser.nama_belakang,
-          email: dataUser.email,
-          universitas: "Universitas Pembangunan Nasional Veteran Jawa Timur",
-          jurusan: "Sistem Informasi",
-          bio: "",
-        })
-      )
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-        router.push("/masuk");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+  const validatePassword = () => {
+    let isValid = true;
+    if (dataUser.password !== "" && confirmPassword !== "") {
+      if (dataUser.password !== confirmPassword) {
+        isValid = false;
+        setOpenModal(true);
+        setErrMsg("Konfirmasi kata sandi tidak sesuai");
+      }
+    }
+    return isValid;
   };
+
+  const npmUser = dataUser.npm;
+
+  const modalProps = { openModal, setOpenModal, errMsg };
+  const propsIsFormatNPMCorrect = { npmUser, setErrMsg, setOpenModal };
+  const propsIsNPMRegistered = { allUser, npmUser, setErrMsg, setOpenModal };
+
+  console.log(dataUser.password, confirmPassword);
+
+  const handleDaftar = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      if (isFormatNPMCorrect(propsIsFormatNPMCorrect)) {
+        if (isNPMRegistered(propsIsNPMRegistered)) {
+          if (validatePassword()) {
+            const daftar = await createUserWithEmailAndPassword(
+              auth,
+              dataUser.email,
+              dataUser.password
+            );
+            if (daftar) {
+              addDoc(penggunaCollectionRef, {
+                npm: dataUser.npm,
+                nama_depan: dataUser.nama_depan,
+                nama_belakang: dataUser.nama_belakang,
+                email: dataUser.email,
+                universitas:
+                  "Universitas Pembangunan Nasional Veteran Jawa Timur",
+                jurusan: "Sistem Informasi",
+                bio: "",
+              });
+            }
+            router.push("/masuk");
+          }
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        setOpenModal(true);
+        setErrMsg("email telah digunakan");
+      }
+      setLoading(false);
+    }
+  };
+
+  console.log(errMsg);
 
   return (
     <div className="container flex">
-      <SideBarLogin heightValue={1100} />
-      <div className="ml-20 mt-10 basis-1/2">
+      <SideBarLogin />
+      <div className="ml-20 mt-10">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
@@ -94,7 +141,7 @@ const Daftar = () => {
                 value={dataUser.npm}
                 className="block  w-full rounded-full border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-[#F16464] focus:ring-[#F16464]"
                 placeholder="19820100xx"
-                required=""
+                required
               />
             </div>
             {/* nama depan & belakang */}
@@ -187,24 +234,25 @@ const Daftar = () => {
                 type="password"
                 id="password"
                 onChange={(e) => {
-                  setConfirmPass(e.target.value);
+                  setConfirmPassword(e.target.value);
                 }}
-                value={confirmPass}
+                value={confirmPassword}
                 className="block  w-full rounded-full border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-[#F16464] focus:ring-[#F16464]"
                 required
               />
             </div>
-            <div className="align-center mt-10 flex justify-center">
+            <div className="mt-10 flex w-full items-center justify-center">
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#F05050] px-10 py-2.5 text-center text-sm font-medium text-white sm:w-auto"
+                className="w-full rounded-full bg-[#F05050] px-60 py-2.5 text-center text-lg font-medium text-white sm:w-auto"
               >
-                Daftar
+                {loading ? <Spinner /> : "Daftar"}
               </button>
             </div>
           </form>
         </div>
       </div>
+      <ModalGagal modalProps={modalProps} />
     </div>
   );
 };

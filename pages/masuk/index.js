@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
 import SideBarLogin from "@/components/Sidebar/SideBarLogin";
+import Cookies from "js-cookie";
 import Link from "next/link";
+import ModalGagal from "@/components/ModalMessage/ModalGagal";
+import Spinner from "@/components/Spinner";
 
 const Masuk = () => {
   const [dataUser, setDataUser] = useState({
@@ -12,23 +15,51 @@ const Masuk = () => {
     password: "",
   });
 
+  const [openModal, setOpenModal] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
-  const logInWithEmailAndPassword = (e) => {
+  const logInWithEmailAndPassword = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, dataUser.email, dataUser.password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        router.push("/dashboard");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+    setLoading(true);
+    try {
+      const login = await signInWithEmailAndPassword(
+        auth,
+        dataUser.email,
+        dataUser.password
+      );
+      if (login) {
+        router.push("dashboard");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error.code);
+      if (error.code === "auth/user-not-found") {
+        setOpenModal(true);
+        setErrMsg("Akun pengguna belum terdaftar!");
+      } else if (error.code === "auth/wrong-password") {
+        setOpenModal(true);
+        setErrMsg("Kata sandi salah!");
+      }
+      setLoading(false);
+    }
   };
+
+  const modalProps = { openModal, setOpenModal, errMsg };
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        Cookies.set("uid_user", user.uid);
+        Cookies.set("email", user.email);
+      }
+    });
+    return () => {
+      listen();
+    };
+  }, []);
 
   return (
     <div className="container flex h-[750px]">
@@ -99,12 +130,13 @@ const Masuk = () => {
                 type="submit"
                 className="w-full rounded-full bg-[#F05050] px-10 py-2.5 text-center text-sm font-medium text-white sm:w-auto"
               >
-                Masuk
+                {loading ? <Spinner /> : "Masuk"}
               </button>
             </div>
           </form>
         </div>
       </div>
+      <ModalGagal modalProps={modalProps} />
     </div>
   );
 };

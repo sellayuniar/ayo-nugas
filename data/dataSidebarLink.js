@@ -13,7 +13,7 @@ export const dataSidebarLink = [
   {
     id: 2,
     title: "Inventaris Tugas",
-    slug: "/",
+    slug: "/inventaris-tugas",
     icon: <Docs />,
   },
   {
@@ -25,7 +25,7 @@ export const dataSidebarLink = [
   {
     id: 4,
     title: "Laporan",
-    slug: "/",
+    slug: "/laporan",
     icon: <Report />,
   },
 ];

@@ -15,16 +15,20 @@
     "firebase": "^9.22.2",
     "flowbite": "^1.6.6",
     "flowbite-react": "^0.4.7",
+    "howler": "^2.2.3",
     "js-cookie": "^3.0.5",
     "next": "13.4.5",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
+    "react-select": "^5.7.3",
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {
+    "file-loader": "^6.2.0",
     "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "url-loader": "^4.1.1"
   }
 }

@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import Menu from "@/assets/icons/Menu";
 import Notification from "@/assets/icons/Notification";
 import Profile from "@/assets/icons/Profile";
-import { useStateContext } from "@/context/ContextProvider";
 import ArrowOut from "@/assets/icons/ArrowOut";
 import ArrowDown from "@/assets/icons/ArrowDown";
-import { useToggle } from "@/context/ContextProvider";
+// import { useToggle } from "@/context/ContextProvider";
 import Link from "next/link";
 import { auth } from "@/config/firebase";
+import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const NavDashboard = () => {
-  const { toggle } = useToggle();
   const [openProfile, setOpenProfile] = useState(false);
   const openMenu = () => {
     setOpenProfile(!openProfile);
@@ -20,7 +20,9 @@ const NavDashboard = () => {
   const router = useRouter();
 
   const signOutHandler = () => {
-    return auth.signOut().then(router.push("/"));
+    Cookies.remove("uid_user");
+    Cookies.remove("email");
+    return signOut(auth).then(router.push("/"));
   };
 
   return (
@@ -32,7 +34,6 @@ const NavDashboard = () => {
               type="button"
               aria-expanded="false"
               aria-label="Toggle sidenav"
-              onClick={toggle}
               className="text-4xl text-gray-700 focus:outline-none"
             >
               <Menu />
@@ -61,18 +62,21 @@ const NavDashboard = () => {
       >
         <ul className="">
           <li className="mb-3 px-10 py-3 hover:bg-gray-50">
-            <Link href="/dashboard" className="flex items-center">
+            <Link href="/akun" className="flex items-center">
               <span className="mr-2">
                 <Profile />
               </span>
               Akun
             </Link>
           </li>
-          <li className="flex items-center px-10 py-3 hover:bg-gray-50">
-            <span className="mr-2">
+          <li
+            className="flex cursor-pointer items-center px-10 py-3 hover:bg-gray-50"
+            onClick={signOutHandler}
+          >
+            <span className="mr-2 ">
               <ArrowOut />
             </span>
-            <span onClick={signOutHandler}>Keluar</span>
+            <span>Keluar</span>
           </li>
         </ul>
       </div>
