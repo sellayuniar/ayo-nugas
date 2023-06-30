@@ -7,7 +7,7 @@ export const isFormatNPMCorrect = (propsIsFormatNPMCorrect) => {
     setErrMsg("npm tidak sesuai");
     isValid = false;
   }
-  console.log(NPMSifo);
+  // console.log(NPMSifo);
   return isValid;
 };
 
@@ -22,6 +22,6 @@ export const isNPMRegistered = (propsIsNPMRegistered) => {
     setErrMsg("Npm terdaftar");
     isValid = false;
   }
-  console.log(searchNPM);
+  // console.log(searchNPM);
   return isValid;
 };

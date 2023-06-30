@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/config/firebase";
+import { isFormatNPMCorrect, isNPMRegistered } from "@/utils/authUtils";
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
 import SideBarLogin from "@/components/Sidebar/SideBarLogin";
-import { isFormatNPMCorrect, isNPMRegistered } from "@/utils/authUtils";
 import ModalGagal from "@/components/ModalMessage/ModalGagal";
+import ModalSukses from "@/components/ModalMessage/ModalSukses";
 import Spinner from "@/components/Spinner";
 
 const Daftar = () => {
@@ -21,11 +21,10 @@ const Daftar = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [openModalSukses, setOpenModalSukses] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const penggunaCollectionRef = collection(db, "pengguna");
-
-  const router = useRouter();
 
   useEffect(() => {
     const getUsers = async () => {
@@ -40,7 +39,7 @@ const Daftar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(allUser);
+  // console.log(allUser);
 
   const validatePassword = () => {
     let isValid = true;
@@ -57,6 +56,7 @@ const Daftar = () => {
   const npmUser = dataUser.npm;
 
   const modalProps = { openModal, setOpenModal, errMsg };
+  const modalSuksesProps = { openModalSukses, setOpenModalSukses };
   const propsIsFormatNPMCorrect = { npmUser, setErrMsg, setOpenModal };
   const propsIsNPMRegistered = { allUser, npmUser, setErrMsg, setOpenModal };
 
@@ -76,6 +76,7 @@ const Daftar = () => {
             );
             if (daftar) {
               addDoc(penggunaCollectionRef, {
+                uid: daftar.user.uid,
                 npm: dataUser.npm,
                 nama_depan: dataUser.nama_depan,
                 nama_belakang: dataUser.nama_belakang,
@@ -85,8 +86,8 @@ const Daftar = () => {
                 jurusan: "Sistem Informasi",
                 bio: "",
               });
+              setOpenModalSukses(true);
             }
-            router.push("/masuk");
           }
         }
       }
@@ -103,9 +104,9 @@ const Daftar = () => {
   console.log(errMsg);
 
   return (
-    <div className="container flex">
+    <div className="flex justify-center">
       <SideBarLogin />
-      <div className="ml-20 mt-10">
+      <div className="mt-10 flex basis-6/12 flex-col lg:mx-24">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
@@ -244,7 +245,7 @@ const Daftar = () => {
             <div className="mt-10 flex w-full items-center justify-center">
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#F05050] px-60 py-2.5 text-center text-lg font-medium text-white sm:w-auto"
+                className="w-full rounded-full bg-[#F05050] px-80 py-2.5 text-center text-lg font-medium text-white sm:w-auto"
               >
                 {loading ? <Spinner /> : "Daftar"}
               </button>
@@ -253,6 +254,7 @@ const Daftar = () => {
         </div>
       </div>
       <ModalGagal modalProps={modalProps} />
+      <ModalSukses modalSuksesProps={modalSuksesProps} />
     </div>
   );
 };

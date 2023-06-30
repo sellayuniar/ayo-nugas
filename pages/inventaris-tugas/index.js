@@ -1,7 +1,10 @@
 import React from "react";
+import Layout from "@/widget/Layout";
 
 const InventarisTugas = () => {
-  return <div>InventarisTugas</div>;
+  return <Layout>
+    inventaris tugas
+    </Layout>;
 };
 
 export default InventarisTugas;

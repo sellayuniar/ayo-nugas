@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "@/assets/icons/Menu";
 import Notification from "@/assets/icons/Notification";
 import Profile from "@/assets/icons/Profile";
@@ -6,19 +6,38 @@ import ArrowOut from "@/assets/icons/ArrowOut";
 import ArrowDown from "@/assets/icons/ArrowDown";
 // import { useToggle } from "@/context/ContextProvider";
 import Link from "next/link";
-import { auth } from "@/config/firebase";
+import { auth, db } from "@/config/firebase";
+import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
 const NavDashboard = () => {
+  const [firstName, setFirstName] = useState("");
   const [openProfile, setOpenProfile] = useState(false);
   const openMenu = () => {
     setOpenProfile(!openProfile);
   };
-
+  const emailUser = Cookies.get("email");
   const router = useRouter();
+  const penggunaDocRef = collection(db, "pengguna");
+  const q = query(penggunaDocRef, where("email", "==", emailUser || ""));
 
+  //dapatin first name
+  const getUser = async () => {
+    const data = await getDocs(q);
+    console.log(data);
+    const filteredData = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setFirstName(filteredData[0].nama_depan);
+  };
+
+  useEffect(() => {
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const signOutHandler = () => {
     Cookies.remove("uid_user");
     Cookies.remove("email");
@@ -47,7 +66,7 @@ const NavDashboard = () => {
               <Profile />
             </button>
             <div className="mr-2 flex">
-              <p>Hai, Sella</p>
+              <p>Hai, {firstName}</p>
               <button onClick={openMenu}>
                 <ArrowDown />
               </button>

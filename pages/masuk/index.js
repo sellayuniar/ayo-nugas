@@ -62,9 +62,9 @@ const Masuk = () => {
   }, []);
 
   return (
-    <div className="container flex h-[750px]">
-      <SideBarLogin heightValue={800} />
-      <div className="ml-20 mt-10 basis-1/2">
+    <div className="flex h-[730px] justify-center">
+      <SideBarLogin />
+      <div className="mt-10 flex basis-6/12 flex-col lg:mx-24">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
