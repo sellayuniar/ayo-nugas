@@ -8,7 +8,7 @@ const TotalTugasSelesai = ({ dataPomodoro = [], dateList }) => {
     return moment(date).format("DD/MM/YYYY");
   };
 
-  console.log(dataPomodoro);
+  // console.log(dataPomodoro);
 
   const getCurrentDatasets = () => {
     return {

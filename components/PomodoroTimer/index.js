@@ -17,15 +17,17 @@ const BellSfx = new Howl({
 });
 
 const PomodoroTimer = ({ propsPomodoroTimer }) => {
-  const [dataPomodoro, setDataPomodoro] = useState({
-    uid: "",
-    idTugas: "",
-    emailUser: "",
-    judulTugas: "",
-    real: "",
-    estimasi: "",
+  const [dataTugas, setDataTugas] = useState({
+    judul: "",
+    catatan: "",
     waktuPengerjaan: "",
-    waktuSelesaiPengerjaan: "",
+    tipe: "",
+    kategori: "",
+    status: "",
+    estimasi: 0,
+    real: 0,
+    waktuPengerjaanReal: "",
+    WaktuPengerjaanSelesai: "",
   });
 
   const [isRunning, setIsRunning] = useState(false);
@@ -36,8 +38,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
   const [breakInterval, setBreakInterval] = useState(0);
   const [onPause, setOnPause] = useState(false);
 
-  const { idTugas, isPlay, setIsPlay, idPomodoro, setFetchStatus } =
-    propsPomodoroTimer;
+  const { idTugas, isPlay, setIsPlay, setFetchStatus } = propsPomodoroTimer;
 
   useEffect(() => {
     if (isPlay) {
@@ -50,25 +51,25 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
 
   const getTugasById = async () => {
     try {
-      const pomodoroDocRef = doc(db, "pomodoro", idPomodoro || "");
-      if (!idPomodoro) return false;
-      const docSnap = await getDoc(pomodoroDocRef);
-      const dataPomodoro = docSnap.data();
-      setDataPomodoro({
-        uid: dataPomodoro.uid,
-        emailUser: dataPomodoro.email_user,
-        idPomodoro: idPomodoro,
-        judulTugas: dataPomodoro.judul_tugas,
-        estimasi: dataPomodoro.estimasi,
-        real: dataPomodoro.real,
+      const tugasDocRef = doc(db, "tugas", idTugas || "");
+      if (!idTugas) return false;
+      const docSnap = await getDoc(tugasDocRef);
+      const data = docSnap.data();
+      setDataTugas({
+        judul: data.judul_tugas,
+        catatan: data.catatan,
+        waktuPengerjaan: data.waktu_pengerjaan,
+        tipe: data.tipe_tugas,
+        kategori: data.kategori_tugas,
+        status: data.status,
+        estimasi: data.estimasi,
+        real: data.real,
       });
+      setWorkInterval(parseInt(data.real));
     } catch (err) {
       console.error(err);
     }
   };
-
-  console.log(dataPomodoro);
-  console.log(idPomodoro);
 
   useEffect(() => {
     if (isRunning) {
@@ -117,7 +118,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     setIsRunning(true);
     setOnPause(false);
     if (workInterval === 0) {
-      updateDataPomodoroStart();
+      updatedataTugasStart();
     }
   };
 
@@ -134,17 +135,18 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     setTimeSec(0);
     setOnPause(false);
     setWorkInterval(0);
-    updateDataPomodoroEnd();
-    updateDataTugas();
-    setDataPomodoro({
-      uid: "",
-      idTugas: "",
-      emailUser: "",
-      judulTugas: "",
-      real: "",
-      estimasi: "",
+    updatedataTugasEnd();
+    setDataTugas({
+      judul: "",
+      catatan: "",
       waktuPengerjaan: "",
-      waktuSelesaiPengerjaan: "",
+      tipe: "",
+      kategori: "",
+      status: "",
+      estimasi: 0,
+      real: 0,
+      waktuPengerjaanReal: "",
+      WaktuPengerjaanSelesai: "",
     });
   };
 
@@ -160,41 +162,32 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     }
   };
 
-  const timestamp = Date.now();
-
-  const updateDataPomodoroStart = async () => {
-    const pomodoroDocRef = doc(db, "pomodoro", idPomodoro || "");
-    await updateDoc(pomodoroDocRef, {
-      waktu_pengerjaan_real: timestamp,
-    });
-  };
-
-  const updateDataPomodoroEnd = async () => {
-    const pomodoroDocRef = doc(db, "pomodoro", idPomodoro || "");
-    await updateDoc(pomodoroDocRef, {
-      waktu_selesai_pengerjaan: timestamp,
-      real: workInterval,
-    });
-  };
-
-  const updateDataTugas = async () => {
+  const updatedataTugasStart = async () => {
     const tugasDocRef = doc(db, "tugas", idTugas || "");
     await updateDoc(tugasDocRef, {
+      waktu_pengerjaan_real: "",
+    });
+  };
+
+  const updatedataTugasEnd = async () => {
+    const tugasDocRef = doc(db, "tugas", idTugas || "");
+    await updateDoc(tugasDocRef, {
+      waktu_pengerjaan_selesai: "",
       real: workInterval,
     });
     setFetchStatus(true);
   };
 
-  const workIntervalValue = () => {
-    const value = parseInt(dataPomodoro.real) + workInterval;
-    if (dataPomodoro.real === undefined || dataPomodoro.real === "") {
-      return workInterval;
-    } else if (isNaN(value)) {
-      return 0;
-    } else {
-      return value;
-    }
-  };
+  // const workIntervalValue = () => {
+  //   const value = workInterval;
+  //   if (dataTugas.real === undefined || dataTugas.real === "") {
+  //     return workInterval;
+  //   } else if (isNaN( workInterval)) {
+  //     return 0;
+  //   } else {
+  //     return value;
+  //   }
+  // };
 
   return (
     <>
@@ -227,7 +220,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         <div className="flex justify-center ">
           {isRunning ? (
             <button
-              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md"
+              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
               onClick={pauseTimer}
             >
               Berhenti Sebentar
@@ -235,7 +228,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           ) : (
             <>
               <button
-                className=" mr-3 rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md"
+                className=" mr-3 rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
                 onClick={startTimer}
               >
                 Mulai
@@ -244,7 +237,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           )}
           {onPause && (
             <button
-              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md"
+              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
               onClick={stopTimer}
             >
               Berhenti
@@ -253,12 +246,9 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         </div>
         <div className="mt-3">
           <h1>
-            #
-            {dataPomodoro.judulTugas !== ""
-              ? dataPomodoro.judulTugas
-              : "Pomodoro"}{" "}
-            {workIntervalValue()}/
-            {dataPomodoro.estimasi !== "" ? dataPomodoro.estimasi : "0"}
+            #{dataTugas.judul !== "" ? dataTugas.judul : "Pomodoro"}{" "}
+            {workInterval}/
+            {dataTugas.estimasi !== "" ? dataTugas.estimasi : "0"}
           </h1>
         </div>
       </div>

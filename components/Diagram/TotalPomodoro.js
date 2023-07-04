@@ -1,9 +1,9 @@
 import React from "react";
-import { Bar, defaulOption } from "react-chartjs-2";
+import { Line, defaulOption } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import moment from "moment";
 
-const TotalWaktuFokus = ({ dataPomodoro = [], dateList }) => {
+const TotalPomodoro = ({ dataPomodoro = [], dateList }) => {
   const formatDate = (date) => {
     return moment(date).format("DD/MM/YYYY");
   };
@@ -15,7 +15,7 @@ const TotalWaktuFokus = ({ dataPomodoro = [], dateList }) => {
       }),
       datasets: [
         {
-          label: "Total Waktu Fokus",
+          label: "Total Pomodoro",
           data: dateList.map((date) => {
             const filteredDataByDate = dataPomodoro?.filter((data) => {
               const getData =
@@ -27,7 +27,7 @@ const TotalWaktuFokus = ({ dataPomodoro = [], dateList }) => {
             filteredDataByDate.forEach((item) => {
               total += parseInt(item.real);
             });
-            return (total*25/60);
+            return total;
           }),
         },
       ],
@@ -35,7 +35,7 @@ const TotalWaktuFokus = ({ dataPomodoro = [], dateList }) => {
   };
 
   return (
-    <Bar
+    <Line
       data={getCurrentDatasets()}
       options={{
         ...defaulOption,
@@ -46,4 +46,4 @@ const TotalWaktuFokus = ({ dataPomodoro = [], dateList }) => {
   );
 };
 
-export default TotalWaktuFokus;
+export default TotalPomodoro;

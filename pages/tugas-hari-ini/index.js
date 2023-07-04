@@ -13,8 +13,9 @@ const TugasHariIni = () => {
   const [openModalRincian, setOpenModalRincian] = useState(false);
   const [fetchStatus, setFetchStatus] = useState(false);
   const [idTugas, setIdTugas] = useState("");
-  const [idPomodoro, setIdPomodoro] = useState("");
   const [isPlay, setIsPlay] = useState(false);
+  const [tidakDirencanakanMendesak, setTidakDirencanakanMendesak] =
+    useState(false);
   const { state, handleFunctions } = useContext(GlobalContext);
   const { semuaTugas } = state;
   const { getDataTugas } = handleFunctions;
@@ -56,9 +57,8 @@ const TugasHariIni = () => {
     setOpenModalRincian(true);
   };
 
-  const handlePlay = (idTugas, idPomodoro) => {
+  const handlePlay = (idTugas) => {
     setIdTugas(idTugas);
-    setIdPomodoro(idPomodoro)
     setIsPlay(true);
   };
 
@@ -66,6 +66,7 @@ const TugasHariIni = () => {
     openModal,
     setOpenModal,
     setFetchStatus,
+    tidakDirencanakanMendesak,
   };
 
   const propsRincianTugas = {
@@ -76,18 +77,18 @@ const TugasHariIni = () => {
   };
 
   const propsPomodoroTimer = {
-    idPomodoro,
     idTugas,
     setFetchStatus,
     isPlay,
     setIsPlay,
   };
+
   return (
     <Layout>
       <div className="mx-5 mb-32 mt-5">
         <h1 className="text-3xl font-bold text-[#404040]">Tugas Hari ini</h1>
 
-        <div className="mt-5 w-full">
+        <div className="mt-10 w-full ">
           {/* timer */}
           <div className="h-80 w-2/4 rounded-lg bg-white p-5 shadow-lg">
             <PomodoroTimer propsPomodoroTimer={propsPomodoroTimer} />
@@ -161,7 +162,7 @@ const TugasHariIni = () => {
                       {data.estimasi}
                     </td>
                     <td scope="col" className="px-6 py-3 text-center">
-                      {data.real === "" ? "0" : data.real}
+                      {data.real}
                     </td>
                     <td scope="col" className="flex px-6 py-3">
                       <span
@@ -176,7 +177,7 @@ const TugasHariIni = () => {
                       <span
                         className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
                         onClick={() => {
-                          handlePlay(data.id, data.id_pomodoro);
+                          handlePlay(data.id);
                         }}
                       >
                         <Play />

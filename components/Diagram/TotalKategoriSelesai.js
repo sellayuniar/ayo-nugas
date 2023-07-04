@@ -21,29 +21,46 @@ const TotalKategoriSelesai = ({ dataPomodoro = [] }) => {
     return uniqueLabels;
   };
 
-  console.log(removeDuplicatesLabels());
+  const sortDuplicatesData = (data) => {
+    let uniqueDatas = [];
+
+    data?.forEach((c) => {
+      if (!uniqueDatas.includes(c.kategori_tugas)) {
+        uniqueDatas.push(c);
+      }
+    });
+
+    return uniqueDatas;
+  };
+
+  const dataChart = dataPomodoro.map((data) => {
+    const dataKategori = data.kategori_tugas;
+    const filteredData = dataPomodoro.filter((kategori) => {
+      return kategori.kategori_tugas === dataKategori;
+    });
+    const sortDuplicate = sortDuplicatesData(filteredData);
+    return sortDuplicate;
+  });
+
+  const removeDuplicates = (arr = []) => {
+    const map = new Map();
+    arr.forEach((x) => map.set(JSON.stringify(x), x));
+    arr = [...map.values()];
+    return arr;
+  };
 
   const getCurrentDatasets = () => {
     return {
       labels: removeDuplicatesLabels(dataPomodoro),
       datasets: [
         {
-          label: "Total Kategori",
-          data: dataPomodoro.map((data) => {
-            const dataKategori = data.kategori_tugas;
-            const filteredData = dataPomodoro?.filter((kategori) => {
-              console.log(dataKategori, kategori.kategori_tugas);
-              return kategori.kategori_tugas === dataKategori;
-            });
-
-            console.log(filteredData);
-
-            return filteredData.length;
+          label: "Total Tugas Selesai",
+          data: removeDuplicates(dataChart).map((data) => {
+            return data.length;
           }),
         },
       ],
     };
-    console.log(labels);
   };
 
   return (

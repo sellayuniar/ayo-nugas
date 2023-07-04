@@ -57,12 +57,12 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
       setDataTugas({
         judul: dataTugas.judul_tugas || "",
         catatan: dataTugas.catatan || "",
-        waktu_pengerjaan: dataTugas?.waktuPengerjaan || "",
+        waktuPengerjaan: dataTugas?.waktu_pengerjaan || "",
         tipe: dataTugas.tipe_tugas || "",
         kategori: dataTugas.kategori_tugas || "",
         status: dataTugas.status || "",
         estimasi: dataTugas.estimasi || "",
-        real: dataTugas.real || "",
+        real: dataTugas.real,
       });
     } catch (err) {
       console.error(err);
@@ -90,7 +90,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
       kategori_tugas: dataTugas.kategori || "",
       status: dataTugas.status || "",
       estimasi: dataTugas.estimasi || "",
-      real: dataTugas.real || "",
+      real: dataTugas.real,
     });
     setFetchStatus(true);
     setUbahData(false);
@@ -179,7 +179,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                         name="waktuPengerjaan"
                         type="datetime-local"
                         className=" h-[50px] w-full rounded-full border-gray-200 focus:border-red-300 focus:outline-none focus:ring-[#F05050] md:w-[200px] lg:w-[230px]"
-                        value={dataTugas.waktuPengerjaan}
+                        value={dataTugas?.waktuPengerjaan || ""}
                         onChange={handleChange}
                         required
                       />
@@ -256,7 +256,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                 <div className="mb-10 flex flex-col gap-4 md:flex-row md:justify-between">
                   <div className="flex flex-col">
                     <label className="mb-2 font-semibold">Status</label>
-                    <div className="w-full md:w-[200px] lg:w-[230px]">
+                    <div className="mt-2 w-full md:w-[200px] lg:w-[230px]">
                       {ubahData ? (
                         <Select
                           id="kategoriTugas"
@@ -293,9 +293,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                         type="number"
                         className="mt-2 h-[50px] w-full rounded-full border-gray-200 focus:border-red-300 focus:outline-none focus:ring-[#F05050] md:w-[200px] lg:w-[230px]"
                         placeholder="contoh: 1"
-                        value={
-                          dataTugas.estimasi === 0 ? "" : dataTugas.estimasi
-                        }
+                        value={dataTugas.estimasi}
                         onChange={handleChange}
                         required
                       />
@@ -313,7 +311,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                         type="number"
                         className="mt-2 h-[50px] w-full rounded-full border-gray-200 focus:border-red-300 focus:outline-none focus:ring-[#F05050] md:w-[200px] lg:w-[230px]"
                         placeholder="contoh: 1"
-                        value={dataTugas.real === "" ? 0 : dataTugas.real}
+                        value={dataTugas.real}
                         onChange={handleChange}
                       />
                     ) : (

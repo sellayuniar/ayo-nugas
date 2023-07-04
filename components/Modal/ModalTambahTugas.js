@@ -15,7 +15,8 @@ import Spinner from "../Spinner";
 import ModalTugasBerhasil from "../ModalMessage/ModalTugasBerhasil";
 
 const ModalTambahTugas = ({ propsTambahTugas }) => {
-  const { openModal, setOpenModal, setFetchStatus } = propsTambahTugas;
+  const { openModal, setOpenModal, setFetchStatus, tidakDirencanakanMendesak } =
+    propsTambahTugas;
   const [dataTugas, setDataTugas] = useState({
     judul: "",
     catatan: "",
@@ -28,8 +29,6 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
   });
   const [loading, setLoading] = useState(false);
   const [modalBerhasil, setModalBerhasil] = useState(false);
-  // const [idPomodoro, setIdPomodoro] = useState("");
-  // const [getIdPomodoroStatus, setGetIdPomodoroStatus] = useState(false);
   const uid_user = Cookies.get("uid_user");
   const email_user = Cookies.get("email");
   const tugasCollectionRef = collection(db, "tugas");
@@ -56,29 +55,21 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
   const handleTambahTugas = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const pomodoroCollectionRef = collection(db, "pomodoro");
-    await addDoc(pomodoroCollectionRef, {
+
+    await addDoc(tugasCollectionRef, {
       uid: uid_user,
       email_user: email_user,
       judul_tugas: dataTugas.judul,
-      real: "",
+      catatan: dataTugas.catatan,
+      waktu_pengerjaan: dataTugas.waktuPengerjaan,
+      tipe_tugas: dataTugas.tipe,
+      kategori_tugas: dataTugas.kategori,
+      status: dataTugas.status,
       estimasi: dataTugas.estimasi,
+      real: dataTugas.real === "" ? 0 : dataTugas.real,
       waktu_pengerjaan_real: "",
-      waktu_selesai_pengerjaan: "",
-    }).then((docRef) => {
-      addDoc(tugasCollectionRef, {
-        uid: uid_user,
-        id_pomodoro: docRef.id,
-        email_user: email_user,
-        judul_tugas: dataTugas.judul,
-        catatan: dataTugas.catatan,
-        waktu_pengerjaan: dataTugas.waktuPengerjaan,
-        tipe_tugas: dataTugas.tipe,
-        kategori_tugas: dataTugas.kategori,
-        status: dataTugas.status,
-        estimasi: dataTugas.estimasi,
-        real: dataTugas.real,
-      });
+      waktu_pengerjaan_selesai: "",
+      tidak_direncanakan_mendesak: tidakDirencanakanMendesak,
     });
 
     setModalBerhasil(true);
@@ -252,7 +243,7 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
                       type="number"
                       className="mt-2 h-[50px] w-full rounded-full border-gray-200 focus:border-red-300 focus:outline-none focus:ring-[#F05050] md:w-[200px] lg:w-[230px]"
                       placeholder="contoh: 1"
-                      value={dataTugas.real === 0 ? "" : dataTugas.real}
+                      value={dataTugas.real}
                       onChange={handleChange}
                     />
                   </div>
