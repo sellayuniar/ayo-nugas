@@ -3,8 +3,8 @@ import { Howl } from "howler";
 import ClockMp3 from "@/public/media/clock.mp3";
 import BellMp3 from "@/public/media/bell.mp3";
 import { db } from "@/config/firebase";
-import { addDoc, updateDoc, getDoc, doc, collection } from "firebase/firestore";
-import Cookies from "js-cookie";
+import { updateDoc, getDoc, doc } from "firebase/firestore";
+import Head from "next/head";
 
 // assets
 const clockLoop = new Howl({
@@ -37,8 +37,10 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
   const [workInterval, setWorkInterval] = useState(0);
   const [breakInterval, setBreakInterval] = useState(0);
   const [onPause, setOnPause] = useState(false);
-
-  const { idTugas, isPlay, setIsPlay, setFetchStatus } = propsPomodoroTimer;
+  const { idTugas, isPlay, setIsPlay, setFetchStatus, setIdTugas } =
+    propsPomodoroTimer;
+  const [mode, setMode] = useState("pomodoro");
+  const [getDataStatus, setGetDataStatus] = useState(false);
 
   useEffect(() => {
     if (isPlay) {
@@ -66,6 +68,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         real: data.real,
       });
       setWorkInterval(parseInt(data.real));
+      setGetDataStatus(true);
     } catch (err) {
       console.error(err);
     }
@@ -95,8 +98,10 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
             setWorkInterval((workInterval) => workInterval + 1);
             if (workInterval > 0 && workInterval % 3 === 0) {
               setTimeMin(15);
+              setMode("istirahat-panjang");
             } else {
               setTimeMin(5);
+              setMode("istirahat-pendek");
             }
             setOnBreak(true);
           }
@@ -117,8 +122,8 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     clockLoop.play();
     setIsRunning(true);
     setOnPause(false);
-    if (workInterval === 0) {
-      updatedataTugasStart();
+    if (workInterval === 0 && getDataStatus) {
+      updateStatusPengerjaan();
     }
   };
 
@@ -135,7 +140,12 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     setTimeSec(0);
     setOnPause(false);
     setWorkInterval(0);
-    updatedataTugasEnd();
+    if (getDataStatus) {
+      updatedataTugasEnd();
+      setIdTugas("");
+      setGetDataStatus(false);
+    }
+    setMode("pomodoro");
     setDataTugas({
       judul: "",
       catatan: "",
@@ -162,62 +172,67 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     }
   };
 
-  const updatedataTugasStart = async () => {
+  const updateStatusPengerjaan = async () => {
     const tugasDocRef = doc(db, "tugas", idTugas || "");
     await updateDoc(tugasDocRef, {
-      waktu_pengerjaan_real: "",
+      status: "Sedang Dikerjakan",
     });
+    setFetchStatus(true);
   };
 
   const updatedataTugasEnd = async () => {
     const tugasDocRef = doc(db, "tugas", idTugas || "");
     await updateDoc(tugasDocRef, {
-      waktu_pengerjaan_selesai: "",
       real: workInterval,
     });
     setFetchStatus(true);
   };
 
-  // const workIntervalValue = () => {
-  //   const value = workInterval;
-  //   if (dataTugas.real === undefined || dataTugas.real === "") {
-  //     return workInterval;
-  //   } else if (isNaN( workInterval)) {
-  //     return 0;
-  //   } else {
-  //     return value;
-  //   }
-  // };
-
   return (
     <>
-      <div className="flex justify-between">
-        <span className="text-xl font-bold">
+      <div className="flex w-full items-center justify-center">
+        <Head>
+          <title>
+            {dataTugas.judul !== "" ? dataTugas.judul : "Pomodoro"}{" "}
+            {timeMin < 10 ? `0${timeMin}` : timeMin}:
+            {timeSec < 10 ? `0${timeSec}` : timeSec}
+          </title>
+        </Head>
+        <span className={`${mode === "pomodoro" && "text-xl font-bold"} mx-5`}>
           <h2>Pomodoro</h2>
         </span>
-        <span>
+        <span
+          className={`${
+            mode === "istirahat-pendek" && "text-xl font-bold"
+          } mx-10`}
+        >
           <h2>Istirahat Pendek</h2>
         </span>
-        <span>
+        <span
+          className={`${
+            mode === "istirahat-panjang" && "text-xl font-bold"
+          } mx-5`}
+        >
           <h2>Istirahat Panjang</h2>
         </span>
       </div>
       <div className="mt-16 flex flex-col items-center justify-center">
-        <h2 className="text-4xl font-bold">
-          {timeMin < 10 ? `0${timeMin}` : timeMin}:
-          {timeSec < 10 ? `0${timeSec}` : timeSec}
-        </h2>
-        <div>
-          <button className="mx-5 text-xl" onClick={increaseTime}>
-            +
-          </button>
-          <button className="mx-5 text-xl" onClick={reduceTime}>
-            -
-          </button>
+        <div className="">
+          <h2 className="text-4xl font-bold">
+            {timeMin < 10 ? `0${timeMin}` : timeMin}:
+            {timeSec < 10 ? `0${timeSec}` : timeSec}
+          </h2>
+          <div>
+            <button className="mx-5 text-xl" onClick={increaseTime}>
+              +
+            </button>
+            <button className="mx-5 text-xl" onClick={reduceTime}>
+              -
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="mt-8 flex flex-col items-center justify-center gap-2">
-        <div className="flex justify-center ">
+
+        <div className="mt-8 flex">
           {isRunning ? (
             <button
               className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"

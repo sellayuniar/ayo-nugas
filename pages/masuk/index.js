@@ -123,7 +123,7 @@ const Masuk = () => {
               />
             </div>
             <div className="align-center mt-10 flex justify-between">
-              <Link href="#" className="text-[#F05050]">
+              <Link href="/lupa-kata-sandi" className="text-[#F05050]">
                 Lupa Kata Sandi?
               </Link>
               <button

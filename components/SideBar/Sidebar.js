@@ -2,6 +2,8 @@ import SidenavItems from "./Items";
 import SidenavHeader from "./Header";
 import css from "./index.module.css";
 // import { useToggle } from "@/context/ContextProvider";
+import { useContext } from "react";
+import { GlobalContext } from "@/context/GlobalContext";
 
 const style = {
   mobilePosition: {
@@ -16,10 +18,14 @@ const style = {
 
 export default function Sidebar({ mobilePosition }) {
   // const { open, ref } = useToggle();
+  const { state } = useContext(GlobalContext);
+  const { isSidebar } = state;
   return (
     <aside
       // ref={ref}
-      className={`${style.default} ${style.mobilePosition[mobilePosition]}`}
+      className={`${isSidebar ? style.open : style.close} ${style.default} ${
+        style.mobilePosition[mobilePosition]
+      }`}
     >
       <div className={style.container}>
         <SidenavHeader />

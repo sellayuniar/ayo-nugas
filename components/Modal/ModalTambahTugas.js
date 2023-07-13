@@ -15,8 +15,14 @@ import Spinner from "../Spinner";
 import ModalTugasBerhasil from "../ModalMessage/ModalTugasBerhasil";
 
 const ModalTambahTugas = ({ propsTambahTugas }) => {
-  const { openModal, setOpenModal, setFetchStatus, tidakDirencanakanMendesak } =
-    propsTambahTugas;
+  const {
+    openModal,
+    setOpenModal,
+    setFetchStatus,
+    tidakDirencanakanMendesak,
+    setTidakDirencanakanMendesak,
+  } = propsTambahTugas;
+
   const [dataTugas, setDataTugas] = useState({
     judul: "",
     catatan: "",
@@ -45,6 +51,9 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
       estimasi: 0,
       real: 0,
     });
+    if (tidakDirencanakanMendesak) {
+      setTidakDirencanakanMendesak(false);
+    }
     setOpenModal(false);
   };
 
@@ -73,6 +82,7 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
     });
 
     setModalBerhasil(true);
+    setTidakDirencanakanMendesak(false);
     setLoading(false);
   };
 

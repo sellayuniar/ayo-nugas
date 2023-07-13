@@ -108,7 +108,7 @@ const InventarisTugas = () => {
                 selected={selectedDate}
                 onChange={handleDateChange}
                 dateFormat="dd-MM-yyyy"
-                className="border-none w-[150px]"
+                className="w-[150px] border-none"
                 placeholder="pilih tanggal"
               />
             </div>

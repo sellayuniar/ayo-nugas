@@ -6,7 +6,10 @@ import ModalTugas from "@/components/Modal/ModalTambahTugas";
 import ModalRincian from "@/components/Modal/ModalRincianTugas";
 import { GlobalContext } from "@/context/GlobalContext";
 import moment from "moment";
+import Clock from "@/components/Clock.js";
 import PomodoroTimer from "@/components/PomodoroTimer";
+import TableTugasHariIni from "@/components/Datatables/TableTugasHariIni";
+import TableTugasTidakDirencanakanMendesak from "@/components/Datatables/TableTugasTidakDirencanakanMendesak";
 
 const TugasHariIni = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -17,7 +20,7 @@ const TugasHariIni = () => {
   const [tidakDirencanakanMendesak, setTidakDirencanakanMendesak] =
     useState(false);
   const { state, handleFunctions } = useContext(GlobalContext);
-  const { semuaTugas } = state;
+  const { semuaTugas, loading } = state;
   const { getDataTugas } = handleFunctions;
 
   useEffect(() => {
@@ -32,6 +35,8 @@ const TugasHariIni = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStatus, setFetchStatus]);
 
+  console.log(semuaTugas);
+
   const getDataTugasHariIni = () => {
     const today = moment().format("YYYY-MM-DD");
     const waktuPengerjaanFormat = (date) => {
@@ -44,13 +49,28 @@ const TugasHariIni = () => {
     return filterTugasByDate;
   };
 
-  const sortTugasHariIni = getDataTugasHariIni().sort((a, b) => {
+  const getDataTugasUtama = getDataTugasHariIni().filter((data) => {
+    return data.tidak_direncanakan_mendesak === false;
+  });
+
+  const sortTugasHariIni = getDataTugasUtama.sort((a, b) => {
     return new Date(a.waktu_pengerjaan) - new Date(b.waktu_pengerjaan);
   });
 
   const formatDateTime = (date) => {
     return moment(date).format("DD/MM/YYYY HH:mm");
   };
+
+  const getTugasTidakDirencanakanMendesak = getDataTugasHariIni().filter(
+    (data) => {
+      return data.tidak_direncanakan_mendesak === true;
+    }
+  );
+
+  const sortTugasTidakDirencanakanMendesak =
+    getTugasTidakDirencanakanMendesak.sort((a, b) => {
+      return new Date(a.waktu_pengerjaan) - new Date(b.waktu_pengerjaan);
+    });
 
   const handleModalRincian = (idTugas) => {
     setIdTugas(idTugas);
@@ -62,11 +82,17 @@ const TugasHariIni = () => {
     setIsPlay(true);
   };
 
+  const handleTidakDirencanakan = () => {
+    setTidakDirencanakanMendesak(true);
+    setOpenModal(true);
+  };
+
   const propsTambahTugas = {
     openModal,
     setOpenModal,
     setFetchStatus,
     tidakDirencanakanMendesak,
+    setTidakDirencanakanMendesak,
   };
 
   const propsRincianTugas = {
@@ -81,19 +107,35 @@ const TugasHariIni = () => {
     setFetchStatus,
     isPlay,
     setIsPlay,
+    setIdTugas,
+  };
+
+  const propsTugasUtamaHariIni = {
+    sortTugasHariIni,
+    formatDateTime,
+    handlePlay,
+    handleModalRincian,
+  };
+
+  const propsTugasTidakDirencakanMendesak = {
+    sortTugasTidakDirencanakanMendesak,
+    formatDateTime,
+    handlePlay,
+    handleModalRincian,
   };
 
   return (
     <Layout>
-      <div className="mx-5 mb-32 mt-5">
+      <div className="mx-5 mb-10 mt-5">
         <h1 className="text-3xl font-bold text-[#404040]">Tugas Hari ini</h1>
-
-        <div className="mt-10 w-full ">
+        <div className="mt-10 flex w-full flex-row ">
           {/* timer */}
-          <div className="h-80 w-2/4 rounded-lg bg-white p-5 shadow-lg">
+          <div className="h-80 w-3/4 rounded-lg bg-white p-5 shadow-lg">
             <PomodoroTimer propsPomodoroTimer={propsPomodoroTimer} />
           </div>
-          <div></div>
+          <div className="ml-5 h-80 w-1/4 rounded-lg bg-white p-5 shadow-lg">
+            <Clock />
+          </div>
         </div>
 
         <div className="mt-10">
@@ -107,88 +149,43 @@ const TugasHariIni = () => {
               </button>
               <ModalTugas propsTambahTugas={propsTambahTugas} />
             </div>
-            <button className=" rounded-lg bg-white px-8 py-2  shadow-lg">
-              Urutkan Berdasarkan Status
-            </button>
           </div>
 
           {/* tabel */}
           <div className="relative overflow-x-auto">
-            <table className="w-full rounded-xl bg-white py-12 text-left shadow-lg">
-              <thead className="border-b-4 pt-3">
-                <tr className="px-2 py-3">
-                  <th scope="col" className=" w-10 px-6 py-3">
-                    No.
-                  </th>
-                  <th scope="col" className="w-64 px-6 py-3">
-                    Judul Tugas
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Waktu Pengerjaan
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Estimasi
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Real
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortTugasHariIni.map((data, idx) => (
-                  <tr
-                    className="border-b-2 px-2 hover:bg-red-200"
-                    key={data.id}
-                  >
-                    <td scope="col" className=" px-6 py-3">
-                      {idx + 1}
-                    </td>
-                    <td scope="col" className="w-64 px-6 py-3">
-                      {data.judul_tugas}
-                    </td>
-                    <td scope="col" className="px-6 py-3">
-                      {formatDateTime(data.waktu_pengerjaan)}
-                    </td>
-                    <td scope="col" className="px-6 py-3">
-                      {data.status}
-                    </td>
-                    <td scope="col" className="px-6 py-3 text-center">
-                      {data.estimasi}
-                    </td>
-                    <td scope="col" className="px-6 py-3 text-center">
-                      {data.real}
-                    </td>
-                    <td scope="col" className="flex px-6 py-3">
-                      <span
-                        className="hover: mr-2 h-8 w-8 cursor-pointer
-                    text-[#EE3D3D] hover:text-[#d63737]"
-                        onClick={() => {
-                          handleModalRincian(data.id);
-                        }}
-                      >
-                        <Edit />
-                      </span>
-                      <span
-                        className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
-                        onClick={() => {
-                          handlePlay(data.id);
-                        }}
-                      >
-                        <Play />
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TableTugasHariIni
+              propsTugasUtamaHariIni={propsTugasUtamaHariIni}
+            />
           </div>
           <ModalRincian propsRincianTugas={propsRincianTugas} />
+        </div>
+      </div>
+      <hr className="mt-5 w-full border-4" />
+      <div className="mx-5 mb-32 mt-5">
+        <h1 className="text-3xl font-bold text-[#404040]">
+          Tugas Tidak Direncanakan dan Mendesak
+        </h1>
+
+        <div className="mt-5">
+          <div className="mb-5 flex justify-between">
+            <div>
+              <button
+                className="text-md rounded-full bg-[#F16464] px-6 py-3 text-white shadow-lg hover:bg-[#d63737]"
+                onClick={handleTidakDirencanakan}
+              >
+                Tambah Tugas
+              </button>
+              <ModalTugas propsTambahTugas={propsTambahTugas} />
+            </div>
+          </div>
+
+          <div className="relative overflow-x-auto">
+            <TableTugasTidakDirencanakanMendesak
+              propsTugasTidakDirencakanMendesak={
+                propsTugasTidakDirencakanMendesak
+              }
+            />
+          </div>
         </div>
       </div>
     </Layout>

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React from "react";
 import NavDashboard from "@/components/NavDashboard";
 import Sidebar from "@/components/Sidebar/Sidebar";
 
@@ -7,7 +9,7 @@ const style = {
   main: `h-screen overflow-auto pb-36 pt-8 px-2 md:pb-8 md:pt-4 md:px-8 lg:pt-0 bg-red-50`,
 };
 
-export default function Layout({ children }) {
+const Layout = ({ children }) => {
   return (
     <div className={style.container}>
       <div className="flex items-start">
@@ -19,4 +21,6 @@ export default function Layout({ children }) {
       </div>
     </div>
   );
-}
+};
+
+export default Layout;

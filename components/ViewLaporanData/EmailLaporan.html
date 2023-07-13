@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Email Laporan</title>
+    <style>
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+        margin: 0;
+      }
+      main {
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        background-color: #fdecec;
+        display: relative;
+      }
+      .content {
+        border-radius: 10px;
+        padding: 20px;
+        display: absolute;
+        z-index: 99;
+        width: 80%;
+        background-color: #fff;
+      }
+      .garis {
+        height: 2px;
+        width: 2px;
+        color: #cccccc;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="content">
+        <div>
+          <p>Halo, {nama_depan}</p>
+          <p>
+            Berikut laporan pengerjaan tugas kamu pada tanggal {tanggal_mulai} -
+            {tanggal_selesai}
+          </p>
+          <p>Tetap semangat yaa!</p>
+          <br class="garis" />
+        </div>
+        <div>
+          <h1>Laporan Pengerjaan</h1>
+          <div>
+            <div>
+              <p>Nama</p>
+            </div>
+            <div><p>Tanggal</p></div>
+          </div>
+          <table>
+            <tr>
+              <th>No.</th>
+              <th>Judul</th>
+              <th>Catatan</th>
+              <th>Waktu</th>
+              <th>Tipe Tugas</th>
+              <th>Kategori</th>
+              <th>Status</th>
+              <th>Estimasi</th>
+              <th>Real</th>
+            </tr>
+
+            {{tableRows}}
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

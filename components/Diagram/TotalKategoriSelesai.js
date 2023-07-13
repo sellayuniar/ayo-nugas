@@ -2,13 +2,9 @@ import React from "react";
 import { Doughnut, defaulOption } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import moment from "moment";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 const TotalKategoriSelesai = ({ dataPomodoro = [] }) => {
-  //cara dapatin data per category
-  //misal minggu ini kategori mengarang (2)
-  // [{kategori: mengarang} {kategori: mengarang} {kategori: belajar}]
-  //data akhir mengarang(2) belajar(1)
-
   const removeDuplicatesLabels = (data) => {
     let uniqueLabels = [];
 
@@ -54,23 +50,69 @@ const TotalKategoriSelesai = ({ dataPomodoro = [] }) => {
       labels: removeDuplicatesLabels(dataPomodoro),
       datasets: [
         {
-          label: "Total Tugas Selesai",
+          label: "Total Waktu Fokus",
           data: removeDuplicates(dataChart).map((data) => {
-            return data.length;
+            let total = 0;
+            data.forEach((item) => {
+              total += parseInt(item.real);
+            });
+            return (total * 25) / 60;
           }),
+          backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56"],
         },
       ],
     };
   };
 
+  const options = {
+    ...defaulOption,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            console.log(tooltipItem);
+            let label = "Total Waktu Fokus";
+            let hours = Math.floor(tooltipItem.raw * 60);
+            function toHours(totalMinutes) {
+              const hours = Math.floor(totalMinutes / 60);
+
+              return hours;
+            }
+
+            function toMinutes(totalMinutes) {
+              const minutes = totalMinutes % 60;
+              return minutes;
+            }
+
+            console.log(toHours(hours));
+            return `${toHours(hours)} Jam ${toMinutes(hours)} menit`;
+          },
+        },
+      },
+      datalabels: {
+        formatter: (value, context) => {
+          const datapoints = context.chart.data.datasets[0].data;
+          function totalSum(total, datapoint) {
+            return total + datapoint;
+          }
+
+          const totalValue = datapoints.reduce(totalSum, 0);
+          const percentageValue = ((value / totalValue) * 100).toFixed(2);
+
+          return `${percentageValue}%`;
+        },
+        color: "#fff",
+      },
+    },
+  };
+
   return (
     <Doughnut
       data={getCurrentDatasets()}
-      options={{
-        ...defaulOption,
-        responsive: true,
-        maintainAspectRatio: false,
-      }}
+      options={options}
+      plugins={[ChartDataLabels]}
     />
   );
 };

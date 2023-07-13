@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Menu from "@/assets/icons/Menu";
 import Notification from "@/assets/icons/Notification";
 import Profile from "@/assets/icons/Profile";
@@ -6,43 +6,70 @@ import ArrowOut from "@/assets/icons/ArrowOut";
 import ArrowDown from "@/assets/icons/ArrowDown";
 // import { useToggle } from "@/context/ContextProvider";
 import Link from "next/link";
-import { auth, db } from "@/config/firebase";
-import { doc, collection, query, where, getDocs } from "firebase/firestore";
+import { auth } from "@/config/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import ModalNotification from "../ModalNotification";
+import { GlobalContext } from "@/context/GlobalContext";
+import { formatDate } from "@/utils/dateUtils";
+import PushNotification from "../ModalNotification/PushNotification";
+import moment from "moment";
+import { sendNotification } from "@/utils/notifikasiUtils";
 
 const NavDashboard = () => {
-  const [firstName, setFirstName] = useState("");
   const [openProfile, setOpenProfile] = useState(false);
+  const [openNotifications, setOpenNotifications] = useState(false);
   const openMenu = () => {
     setOpenProfile(!openProfile);
   };
-  const emailUser = Cookies.get("email");
-  const router = useRouter();
-  const penggunaDocRef = collection(db, "pengguna");
-  const q = query(penggunaDocRef, where("email", "==", emailUser || ""));
-
-  //dapatin first name
-  const getUser = async () => {
-    const data = await getDocs(q);
-    console.log(data);
-    const filteredData = data.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    setFirstName(filteredData[0].nama_depan);
-  };
+  const { state, handleFunctions } = useContext(GlobalContext);
+  const { user, semuaTugas, isSidebar } = state;
+  const { getUser, getDataTugas, handleSidebar } = handleFunctions;
 
   useEffect(() => {
     getUser();
+    getDataTugas();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const router = useRouter();
+
   const signOutHandler = () => {
     Cookies.remove("uid_user");
     Cookies.remove("email");
     return signOut(auth).then(router.push("/"));
   };
+
+  const propsNotification = { openNotifications, setOpenNotifications };
+
+  const userLogin = user[0];
+
+  const dataTugasMendatang = semuaTugas?.filter((data) => {
+    if (
+      formatDate(data.waktu_pengerjaan) === formatDate(moment()) &&
+      data.status === "Belum Dikerjakan"
+    ) {
+      return moment(data?.waktu_pengerjaan).isSameOrAfter(moment());
+    }
+  });
+
+  const dataTugasTerlewat = semuaTugas?.filter((data) => {
+    if (
+      formatDate(data.waktu_pengerjaan) === formatDate(moment()) &&
+      data.status === "Belum Dikerjakan"
+    ) {
+      return moment(data?.waktu_pengerjaan).isSameOrBefore(moment());
+    }
+  });
+
+  console.log(dataTugasTerlewat);
+  const handleClick = () => {
+    const pesan_waktu = "telah tiba, ayo kerjakan!";
+    sendNotification("Sella", "abc", pesan_waktu);
+  };
+
+  console.log(isSidebar);
 
   return (
     <header className="relative z-10 h-16 items-center bg-white shadow md:h-20">
@@ -54,19 +81,33 @@ const NavDashboard = () => {
               aria-expanded="false"
               aria-label="Toggle sidenav"
               className="text-4xl text-gray-700 focus:outline-none"
+              onClick={handleSidebar}
             >
               <Menu />
             </button>
           </div>
           <div className="relative ml-5 mr-0 flex w-full items-center justify-end p-1 text-gray-700 sm:right-auto sm:mr-0">
-            <button className="mr-2">
+            <button
+              className="mr-2"
+              // onClick={() => {
+              //   setOpenNotifications(!openNotifications);
+              // }}
+              onClick={handleClick}
+            >
               <Notification />
+              <div className="hidden">
+                <PushNotification
+                  dataTugasMendatang={dataTugasMendatang}
+                  userLogin={userLogin}
+                  dataTugasTerlewat={dataTugasTerlewat}
+                />
+              </div>
             </button>
             <button className="mr-2">
               <Profile />
             </button>
             <div className="mr-2 flex">
-              <p>Hai, {firstName}</p>
+              <p>Hai, {user[0]?.nama_depan}</p>
               <button onClick={openMenu}>
                 <ArrowDown />
               </button>
@@ -99,6 +140,7 @@ const NavDashboard = () => {
           </li>
         </ul>
       </div>
+      <ModalNotification propsNotification={propsNotification} />
     </header>
   );
 };

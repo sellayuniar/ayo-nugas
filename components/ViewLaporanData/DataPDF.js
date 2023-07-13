@@ -1,18 +1,32 @@
 import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
-const DataPDF = ({ dataTugasSelesai }) => {
+const DataPDF = ({
+  dataTugasSelesai,
+  user,
+  startDate,
+  endDate,
+  formatDate,
+  formatDateWithFullDay,
+}) => {
   const styles = StyleSheet.create({
     page: {
       fontFamily: "Helvetica",
       fontSize: 12,
-      padding: 15,
+      padding: 16,
       backgroundColor: "#FFFFFF",
     },
     section: {
-      marginLeft: 15,
-      marginRight: 15,
+      marginLeft: 8,
+      marginRight: 8,
       backgroundColor: "#FFFFFF",
+    },
+    heading: {
+      textAlign: "center",
+      margin: 15,
+      fontWeight: "bold",
+      fontSize: 16,
+      color: "#000000",
     },
     text: {
       textAlign: "center",
@@ -21,25 +35,40 @@ const DataPDF = ({ dataTugasSelesai }) => {
       fontSize: 16,
       color: "#000000",
     },
+    textTitleName: {
+      marginRight: 25,
+    },
+    textTitleTanggal: {
+      marginRight: 15,
+    },
+    title: {
+      display: "flex",
+      flexDirection: "row",
+      fontSize: 12,
+      marginBottom: 10,
+    },
     table: {
-      marginTop: 15,
+      paddingTop: 15,
       display: "table",
-      width: "100%",
-      border: 0,
-      // borderBottom: "1px solid #000",
+      width: "120%",
+      // border: 0,
+      marginLeft: -80,
       marginBottom: 16,
     },
     tableRow: {
       margin: "auto",
       flexDirection: "row",
-      border: 0,
+      borderBottom: "1px solid #D9D9D9",
     },
     tableCell: {
       width: "10%",
-      border: 0,
-      borderWidth: 1,
-      borderColor: "#000",
       padding: 16,
+      fontSize: 12,
+    },
+    tableCellNo: {
+      width: "5%",
+      padding: 16,
+      fontSize: 12,
     },
   });
   let no = 1;
@@ -51,11 +80,27 @@ const DataPDF = ({ dataTugasSelesai }) => {
           <View>
             <Text style={styles.text}>Laporan Pengerjaan Tugas</Text>
           </View>
-          <View></View>
+          <View>
+            <View style={styles.title}>
+              <Text style={styles.textTitleName}>Nama</Text>
+              <Text>
+                : {`${user[0]?.nama_depan} ${user[0]?.nama_belakang}`}
+              </Text>
+            </View>
+            <View style={styles.title}>
+              <Text style={styles.textTitleTanggal}>Tanggal</Text>
+              <Text>
+                :{" "}
+                {`${formatDateWithFullDay(startDate)} - ${formatDateWithFullDay(
+                  endDate
+                )}`}
+              </Text>
+            </View>
+          </View>
           <View style={styles.table}>
             {/* Table Header */}
             <View style={styles.tableRow}>
-              <View style={styles.tableCell}>
+              <View style={styles.tableCellNo}>
                 <Text>No.</Text>
               </View>
               <View style={styles.tableCell}>
@@ -65,7 +110,7 @@ const DataPDF = ({ dataTugasSelesai }) => {
                 <Text>Catatan</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>Waktu Pengerjaan</Text>
+                <Text>Tanggal</Text>
               </View>
               <View style={styles.tableCell}>
                 <Text>Tipe Tugas</Text>
@@ -79,7 +124,7 @@ const DataPDF = ({ dataTugasSelesai }) => {
               <View style={styles.tableCell}>
                 <Text>Estimasi</Text>
               </View>
-              <View style={styles.tableCell}>
+              <View style={styles.tableCellNo}>
                 <Text>Real</Text>
               </View>
             </View>
@@ -87,7 +132,7 @@ const DataPDF = ({ dataTugasSelesai }) => {
             {/* Table Body */}
             {dataTugasSelesai.map((row) => (
               <View key={row.id} style={styles.tableRow}>
-                <View style={styles.tableCell}>
+                <View style={styles.tableCellNo}>
                   <Text>{no++}</Text>
                 </View>
                 <View style={styles.tableCell}>
@@ -97,7 +142,7 @@ const DataPDF = ({ dataTugasSelesai }) => {
                   <Text>{row.catatan}</Text>
                 </View>
                 <View style={styles.tableCell}>
-                  <Text>{row.waktu_pengerjaan}</Text>
+                  <Text>{formatDate(row.waktu_pengerjaan)}</Text>
                 </View>
                 <View style={styles.tableCell}>
                   <Text>{row.tipe_tugas}</Text>
@@ -111,7 +156,7 @@ const DataPDF = ({ dataTugasSelesai }) => {
                 <View style={styles.tableCell}>
                   <Text>{row.estimasi}</Text>
                 </View>
-                <View style={styles.tableCell}>
+                <View style={styles.tableCellNo}>
                   <Text>{row.real}</Text>
                 </View>
               </View>

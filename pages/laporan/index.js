@@ -5,30 +5,33 @@ import TotalTugasSelesai from "@/components/Diagram/TotalTugasSelesai";
 import TotalWaktuFokus from "@/components/Diagram/TotalWaktuFokus";
 import TotalKategoriSelesai from "@/components/Diagram/TotalKategoriSelesai";
 import TotalPomodoro from "@/components/Diagram/TotalPomodoro";
-import RangeWaktuFokus from "@/components/Diagram/RangeWaktuFokus";
 import moment from "moment";
 import MiniCard from "@/components/MiniCard";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import {
   startOfWeek,
   endOfWeek,
   getDayBetweenDates,
   formatDateReverse,
   formatDate,
+  formatDateWithDay,
+  formatDateWithFullDay,
 } from "utils/dateUtils";
-import DataPDF from "@/components/ViewLaporanData/DataPDF";
+
+import ModalKonfirmasiKirimEmail from "@/components/ModalMessage/ModalKonfirmasiKirimEmail";
+import ModalKonfirmasiUnduh from "@/components/ModalMessage/ModalKonfirmasiUnduh";
 
 const Laporan = () => {
   const { state, handleFunctions } = useContext(GlobalContext);
-  const { semuaTugas } = state;
-  const { getDataTugas } = handleFunctions;
+  const { semuaTugas, user } = state;
+  const { getDataTugas, getUser } = handleFunctions;
   const [startDate, setStartDate] = useState(formatDateReverse(startOfWeek));
   const [endDate, setEndDate] = useState(formatDateReverse(endOfWeek));
-  const [isClient, setIsClient] = useState(false);
+  const [openModalEmail, setOpenModalEmail] = useState(false);
+  const [openModalUnduh, setOpenModalUnduh] = useState(false);
 
   useEffect(() => {
     getDataTugas();
-    setIsClient(true);
+    getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,7 +57,10 @@ const Laporan = () => {
       return data;
     };
 
-    return getDataTugasByDates();
+    const sortData = getDataTugasByDates().sort(
+      (a, b) => new Date(a.waktu_pengerjaan) - new Date(b.waktu_pengerjaan)
+    );
+    return sortData;
   };
 
   const getTotalPomodoro = () => {
@@ -68,10 +74,10 @@ const Laporan = () => {
   const getTotalPomodoroHariIni = () => {
     const filteredDataByDate = semuaTugas.filter((data) => {
       const today = moment().format("DD/MM/YYYY");
-      return formatDate(data?.waktu_pengerjaan) === today;
+      if (data.status === "Selesai") {
+        return formatDate(data?.waktu_pengerjaan) === today;
+      }
     });
-
-    console.log(filteredDataByDate);
 
     let total = 0;
     filteredDataByDate.forEach((item) => {
@@ -93,7 +99,35 @@ const Laporan = () => {
     return filteredDataByDate.length;
   };
 
-  console.log(getTotalTugasSelesai());
+  const handleKirimEmail = () => {
+    setOpenModalEmail(true);
+  };
+
+  const handleUnduhPDF = () => {
+    setOpenModalUnduh(true);
+  };
+
+  const modalPropsEmail = {
+    openModalEmail,
+    setOpenModalEmail,
+    getTugasSelesai,
+    formatDate,
+    formatDateWithFullDay,
+    user,
+    startDate,
+    endDate,
+  };
+
+  const modalPropsUnduh = {
+    openModalUnduh,
+    setOpenModalUnduh,
+    getTugasSelesai,
+    formatDate,
+    formatDateWithFullDay,
+    user,
+    startDate,
+    endDate,
+  };
 
   return (
     <Layout>
@@ -102,17 +136,16 @@ const Laporan = () => {
         <div className="mt-10 flex flex-col">
           <div className="flex justify-between">
             <div className="flex">
-              {isClient ? (
-                <PDFDownloadLink
-                  document={<DataPDF dataTugasSelesai={getTugasSelesai()} />}
-                  className="text-md mr-5 flex  w-56 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
-                  fileName={`Laporan Tugas ${startDate} - ${endDate}`}
-                >
-                  Unduh PDF
-                </PDFDownloadLink>
-              ) : null}
-
-              <button className="w-56 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]">
+              <button
+                className="w-56 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                onClick={handleUnduhPDF}
+              >
+                Unduh PDF
+              </button>
+              <button
+                className="w-56 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                onClick={handleKirimEmail}
+              >
                 Kirim Ke Email
               </button>
             </div>
@@ -138,14 +171,6 @@ const Laporan = () => {
               </span>
             </div>
           </div>
-          {/* data total */}
-          <div className="h-[500px] w-[800px]">
-            {isClient ? (
-              <PDFViewer style={{ width: "100%", height: "100%" }}>
-                <DataPDF dataTugasSelesai={getTugasSelesai()} />
-              </PDFViewer>
-            ) : null}
-          </div>
 
           <div className="mb-3 mt-10 flex flex-col justify-between md:flex-row">
             <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
@@ -165,13 +190,17 @@ const Laporan = () => {
 
           {/* grafik */}
           <div className="my-5 flex justify-between">
-            <div className="mr-3 h-[400px] w-3/5 rounded-lg bg-white p-5 shadow-lg">
-              <TotalWaktuFokus
+            <div className="mr-3 h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+              <h2 className="mb-3 text-xl font-semibold">Total Waktu Fokus</h2>
+              <TotalPomodoro
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
               />
             </div>
-            <div className="h-[400px] w-3/5 rounded-lg bg-white p-5 shadow-lg">
+            <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+              <h2 className="mb-3 text-xl font-semibold">
+                Proporsi Waktu Fokus
+              </h2>
               <TotalKategoriSelesai
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
@@ -180,27 +209,27 @@ const Laporan = () => {
           </div>
 
           <div className="my-5 flex justify-between">
-            <div className="mr-3 h-[450px] w-3/5 rounded-lg bg-white p-5 shadow-lg">
-              <TotalPomodoro
+            <div className="mr-3 h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+              <h2 className="mb-3 text-xl font-semibold">Total Pomodoro</h2>
+              <TotalWaktuFokus
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
               />
             </div>
-            <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 shadow-lg">
+            <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+              <h2 className="mb-3 text-xl font-semibold">
+                Total Tugas Selesai
+              </h2>
               <TotalTugasSelesai
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
               />
             </div>
           </div>
-
-          <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 shadow-lg">
-            <RangeWaktuFokus />
-          </div>
-
-          {/* tutup container */}
         </div>
       </div>
+      <ModalKonfirmasiKirimEmail modalPropsEmail={modalPropsEmail} />
+      <ModalKonfirmasiUnduh modalPropsUnduh={modalPropsUnduh} />
     </Layout>
   );
 };

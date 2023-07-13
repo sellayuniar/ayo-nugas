@@ -2,18 +2,15 @@ import React from "react";
 import { Bar, defaulOption } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import moment from "moment";
+import { formatDateWithDay, formatDate } from "@/utils/dateUtils";
 
 const TotalTugasSelesai = ({ dataPomodoro = [], dateList }) => {
-  const formatDate = (date) => {
-    return moment(date).format("DD/MM/YYYY");
-  };
-
   // console.log(dataPomodoro);
 
   const getCurrentDatasets = () => {
     return {
       labels: dateList.map((data) => {
-        return formatDate(data);
+        return formatDateWithDay(data);
       }),
       datasets: [
         {
@@ -26,6 +23,7 @@ const TotalTugasSelesai = ({ dataPomodoro = [], dateList }) => {
             });
             return filteredDataByDate.length;
           }),
+          backgroundColor: "#EE3D3D",
         },
       ],
     };
@@ -38,6 +36,23 @@ const TotalTugasSelesai = ({ dataPomodoro = [], dateList }) => {
         ...defaulOption,
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            grid: {
+              display: false,
+            },
+          },
+        },
       }}
     />
   );
