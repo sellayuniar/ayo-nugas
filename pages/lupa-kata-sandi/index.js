@@ -4,23 +4,33 @@ import Spinner from "@/components/Spinner";
 import ModalGagal from "@/components/ModalMessage/ModalGagal";
 import { auth } from "@/config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
+import ModalTerkirim from "@/components/ModalMessage/ModalTerkirim";
 
 const LupaKataSandi = () => {
   const [emailUser, setEmailUser] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [pesan, setPesan] = useState(null);
 
   const sendEmailReset = (e) => {
+    setLoading(true);
     e.preventDefault();
     sendPasswordResetEmail(auth, emailUser)
       .then(() => {
+        setLoading(false);
+        setPesan("Email atur ulang kata sandi berhasil di kirim!");
+        setOpenModal(true);
         console.log("Sending password reset");
       })
       .catch((error) => {
+        setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
       });
   };
+
+  const modalTerkirimProps = { openModal, setOpenModal, pesan };
   return (
     <div className="flex h-[730px] justify-center">
       <SideBarLupaKataSandi />
@@ -68,6 +78,7 @@ const LupaKataSandi = () => {
         </div>
       </div>
       {/* <ModalGagal modalProps={modalProps} /> */}
+      <ModalTerkirim modalTerkirimProps={modalTerkirimProps} />
     </div>
   );
 };

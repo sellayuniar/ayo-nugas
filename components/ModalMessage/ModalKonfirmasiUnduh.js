@@ -16,6 +16,8 @@ export default function ModalKonfirmasiUnduh({ modalPropsUnduh }) {
     endDate,
   } = modalPropsUnduh;
   const [isClient, setIsClient] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [pesan, setPesan] = useState("");
 
   useEffect(() => {
     setIsClient(true);
@@ -37,8 +39,12 @@ export default function ModalKonfirmasiUnduh({ modalPropsUnduh }) {
             <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Apakah anda yakin ingin mengirim mengunduh laporan?
             </h3>
-            <div className="gap-4">
-              <Button color="failure" onClick={() => setOpenModalUnduh(false)}>
+            <div className="flex justify-between gap-4">
+              <Button
+                color="failure"
+                className="w-32"
+                onClick={() => setOpenModalUnduh(false)}
+              >
                 Batal
               </Button>
               {isClient ? (
@@ -53,7 +59,7 @@ export default function ModalKonfirmasiUnduh({ modalPropsUnduh }) {
                       formatDateWithFullDay={formatDateWithFullDay}
                     />
                   }
-                  className="text-md mr-5 flex  w-56 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                  className="text-md mr-5 flex w-32 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
                   fileName={`Laporan Tugas ${startDate} - ${endDate}`}
                   onClick={() => setOpenModalUnduh(false)}
                 >

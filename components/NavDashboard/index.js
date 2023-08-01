@@ -15,7 +15,6 @@ import { GlobalContext } from "@/context/GlobalContext";
 import { formatDate } from "@/utils/dateUtils";
 import PushNotification from "../ModalNotification/PushNotification";
 import moment from "moment";
-import { sendNotification } from "@/utils/notifikasiUtils";
 
 const NavDashboard = () => {
   const [openProfile, setOpenProfile] = useState(false);
@@ -26,6 +25,8 @@ const NavDashboard = () => {
   const { state, handleFunctions } = useContext(GlobalContext);
   const { user, semuaTugas, isSidebar } = state;
   const { getUser, getDataTugas, handleSidebar } = handleFunctions;
+  const [fetchStatus, setFetchStatus] = useState(false);
+  const [newNotif, setNewNotif] = useState(false);
 
   useEffect(() => {
     getUser();
@@ -41,7 +42,14 @@ const NavDashboard = () => {
     return signOut(auth).then(router.push("/"));
   };
 
-  const propsNotification = { openNotifications, setOpenNotifications };
+  const propsNotification = {
+    newNotif,
+    setNewNotif,
+    openNotifications,
+    setOpenNotifications,
+    setFetchStatus,
+    fetchStatus,
+  };
 
   const userLogin = user[0];
 
@@ -63,19 +71,11 @@ const NavDashboard = () => {
     }
   });
 
-  console.log(dataTugasTerlewat);
-  const handleClick = () => {
-    const pesan_waktu = "telah tiba, ayo kerjakan!";
-    sendNotification("Sella", "abc", pesan_waktu);
-  };
-
-  console.log(isSidebar);
-
   return (
     <header className="relative z-10 h-16 items-center bg-white shadow md:h-20">
       <div className="flex-center relative z-10 mx-auto flex h-full flex-col justify-center px-3 text-white">
         <div className="lg:max-w-68 relative flex w-full items-center pl-1 sm:ml-0 sm:pr-2">
-          <div className="group relative flex h-full w-12 items-center">
+          <div className="group relative flex h-full w-12 items-center lg:hidden">
             <button
               type="button"
               aria-expanded="false"
@@ -89,17 +89,23 @@ const NavDashboard = () => {
           <div className="relative ml-5 mr-0 flex w-full items-center justify-end p-1 text-gray-700 sm:right-auto sm:mr-0">
             <button
               className="mr-2"
-              // onClick={() => {
-              //   setOpenNotifications(!openNotifications);
-              // }}
-              onClick={handleClick}
+              onClick={() => {
+                setOpenNotifications(!openNotifications);
+                if (newNotif) setNewNotif(false);
+              }}
             >
-              <Notification />
+              <div className="relative h-8 w-8">
+                <Notification />
+                {newNotif && (
+                  <div className="absolute right-1 top-0 h-3 w-3 rounded-full bg-rose-500"></div>
+                )}
+              </div>
               <div className="hidden">
                 <PushNotification
                   dataTugasMendatang={dataTugasMendatang}
                   userLogin={userLogin}
                   dataTugasTerlewat={dataTugasTerlewat}
+                  setFetchStatus={setFetchStatus}
                 />
               </div>
             </button>

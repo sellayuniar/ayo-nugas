@@ -10,6 +10,8 @@ import Clock from "@/components/Clock.js";
 import PomodoroTimer from "@/components/PomodoroTimer";
 import TableTugasHariIni from "@/components/Datatables/TableTugasHariIni";
 import TableTugasTidakDirencanakanMendesak from "@/components/Datatables/TableTugasTidakDirencanakanMendesak";
+import Weather from "@/components/Weather";
+import Plus from "@/assets/icons/Plus";
 
 const TugasHariIni = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -128,13 +130,18 @@ const TugasHariIni = () => {
     <Layout>
       <div className="mx-5 mb-10 mt-5">
         <h1 className="text-3xl font-bold text-[#404040]">Tugas Hari ini</h1>
-        <div className="mt-10 flex w-full flex-row ">
+        <div className="mt-10 flex w-full flex-col-reverse lg:flex-row">
           {/* timer */}
-          <div className="h-80 w-3/4 rounded-lg bg-white p-5 shadow-lg">
+          <div className="mt-5 h-[400px] w-full rounded-lg bg-white p-5 shadow-lg md:h-[350px] lg:mt-0 lg:w-3/4 ">
             <PomodoroTimer propsPomodoroTimer={propsPomodoroTimer} />
           </div>
-          <div className="ml-5 h-80 w-1/4 rounded-lg bg-white p-5 shadow-lg">
-            <Clock />
+          <div className="flex flex-col">
+            <div className="lg:w- mb-10 h-32 w-full rounded-lg bg-white p-5  shadow-lg lg:ml-5">
+              <Clock />
+            </div>
+            <div className="h-32 w-full rounded-lg bg-white p-5 shadow-lg lg:ml-5 lg:w-full">
+              <Weather />
+            </div>
           </div>
         </div>
 
@@ -142,9 +149,12 @@ const TugasHariIni = () => {
           <div className="mb-5 flex justify-between">
             <div>
               <button
-                className="text-md rounded-full bg-[#F16464] px-6 py-3 text-white shadow-lg hover:bg-[#d63737]"
+                className="text-md flex items-center rounded-full bg-[#F16464] px-6 py-3 text-white shadow-lg hover:bg-[#d63737]"
                 onClick={() => setOpenModal(true)}
               >
+                <span className="mr-2 h-7 w-7">
+                  <Plus />
+                </span>
                 Tambah Tugas
               </button>
               <ModalTugas propsTambahTugas={propsTambahTugas} />
@@ -170,9 +180,12 @@ const TugasHariIni = () => {
           <div className="mb-5 flex justify-between">
             <div>
               <button
-                className="text-md rounded-full bg-[#F16464] px-6 py-3 text-white shadow-lg hover:bg-[#d63737]"
+                className="text-md flex items-center rounded-full bg-[#F16464] px-6 py-3 text-white shadow-lg hover:bg-[#d63737]"
                 onClick={handleTidakDirencanakan}
               >
+                <span className="mr-2 h-7 w-7">
+                  <Plus />
+                </span>
                 Tambah Tugas
               </button>
               <ModalTugas propsTambahTugas={propsTambahTugas} />

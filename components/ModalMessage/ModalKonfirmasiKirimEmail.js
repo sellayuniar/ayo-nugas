@@ -1,6 +1,8 @@
 import ImgGagal from "@/assets/ImgSvg/ImgGagal";
 import { Button, Modal } from "flowbite-react";
 import emailjs from "emailjs-com";
+import { useState } from "react";
+import ModalTerkirim from "./ModalTerkirim";
 
 export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
   const {
@@ -13,6 +15,9 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
     startDate,
     endDate,
   } = modalPropsEmail;
+
+  const [openModal, setOpenModal] = useState(false);
+  const [pesan, setPesan] = useState(false);
 
   //send email
   const sendEmail = () => {
@@ -80,7 +85,16 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
 
   const handleKirimEmail = () => {
     sendEmail();
+
+    setPesan("Email laporan berhasil dikirim!");
     setOpenModalEmail(false);
+    setOpenModal(true);
+  };
+
+  const modalTerkirimProps = {
+    openModal,
+    setOpenModal,
+    pesan,
   };
 
   return (
@@ -98,7 +112,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
             <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Apakah anda yakin ingin mengirim laporan ke email?
             </h3>
-            <div className="gap-4">
+            <div className="flex justify-between gap-4">
               <Button
                 color="failure"
                 onClick={() => setOpenModalEmail(undefined)}
@@ -111,6 +125,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
             </div>
           </div>
         </Modal.Body>
+        <ModalTerkirim modalTerkirimProps={modalTerkirimProps} />
       </Modal>
     </>
   );

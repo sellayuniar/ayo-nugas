@@ -19,6 +19,8 @@ export const createNotification = (title, message, pesan_waktu) => {
   const notification = new Notification(`Hai ${title},`, {
     body: `Waktu pengerjaan tugas ${message} ${pesan_waktu}`,
     icon: "",
+    renotify: false,
+    // tag: "tagName",
   });
   notification.close();
 };

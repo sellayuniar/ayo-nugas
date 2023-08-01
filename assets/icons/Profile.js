@@ -1,10 +1,11 @@
 import React from "react";
 
-const profile = () => {
+const profile = ({ width, height }) => {
   return (
     <svg
-      width={30}
-      height={30}
+      className={`${height ? `h-${height}` : "h-8"} ${
+        width ? `w-${width}` : "w-8"
+      } `}
       viewBox="0 0 50 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

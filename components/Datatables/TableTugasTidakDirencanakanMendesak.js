@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Edit from "@/assets/icons/Edit";
 import Play from "@/assets/icons/Play";
 import Spinner from "../Spinner";
-import { useTable } from "react-table";
+import DataTable from "react-data-table-component";
 
 const TableTugasTidakDirencanakanMendesak = ({
   propsTugasTidakDirencakanMendesak,
@@ -15,114 +15,131 @@ const TableTugasTidakDirencanakanMendesak = ({
     handleModalRincian,
   } = propsTugasTidakDirencakanMendesak;
 
-  //   const [pending, setPending] = useState(true);
-  //   const [rows, setRows] = useState([]);
+  const customStyles = {
+    table: {
+      style: {
+        // padding: pending && "50px 0",
+        // height: pending && "100px",
+      },
+    },
+    progress: {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+    },
+    tableWrapper: {
+      style: {
+        display: "table",
+        borderRadius: "100px",
+        boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "60px", //, override the row height
+        "&:hover:enabled": {
+          backgroundColor: "#D9D9D9",
+        },
+      },
+    },
+    headCells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for head cells
+        paddingRight: "8px",
+        fontWeight: "bold",
+        fontSize: "16px",
+        borderBottom: "3px solid #D9D9D9",
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for data cells
+        paddingRight: "8px",
+        fontSize: "16px",
+        borderBottom: "1px solid #ccc",
 
-  //   useEffect(() => {
-  //     const timeout = setTimeout(() => {
-  //       setRows(sortTugasTidakDirencanakanMendesak);
-  //       setPending(false);
-  //     }, 2000);
-  //     return () => clearTimeout(timeout);
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, []);
+        "&:hover:enabled": {
+          backgroundColor: "#D9D9D9",
+        },
+      },
+    },
+  };
 
-  const columnsTugas = [
+  const columnsTugasHariIni = [
     {
-      Header: "No.",
-      accessor: "idx" + 1,
-      align: "center",
+      name: "No.",
+      selector: (row, idx) => idx + 1,
+      width: "50px",
+      center: true,
     },
     {
-      Header: "Judul Tugas",
-      accessor: "judul_tugas",
+      name: "Judul Tugas",
+      selector: (row) => row.judul_tugas,
+      sortable: true,
+      minWidth: "150px",
     },
     {
-      Header: "Waktu Pengerjaan",
-      accessor: "waktu_pengerjaan",
+      name: "Waktu Pengerjaan",
+      selector: (row) => formatDateTime(row.waktu_pengerjaan),
+      sortable: true,
+      minWidth: "200px",
     },
     {
-      Header: "Status",
-      accessor: "status",
+      name: "Status",
+      selector: (row) => row.status,
+      sortable: true,
+      minWidth: "100px",
     },
     {
-      Header: "Estimasi",
-      accessor: "estimasi",
+      name: "Estimasi",
+      selector: (row) => row.estimasi,
+      sortable: true,
+      minWidth: "50px",
+      center: true,
     },
     {
-      Header: "Real",
-      accessor: "real",
+      name: "Real",
+      selector: (row) => row.real,
+      sortable: true,
+      minWidth: "50px",
+      center: true,
     },
     {
-      Header: "Action",
-      //   accessor: (
-      //     <div className="flex ">
-      //       <span
-      //         className="hover: mr-2 h-8 w-8 cursor-pointer
-      //                         text-[#EE3D3D] hover:text-[#d63737]"
-      //         onClick={() => {
-      //           handleModalRincian(id);
-      //         }}
-      //       >
-      //         <Edit />
-      //       </span>
-      //       <span
-      //         className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
-      //         onClick={() => {
-      //           handlePlay(id);
-      //         }}
-      //       >
-      //         <Play />
-      //       </span>
-      //     </div>
-      //   ),
+      name: "Action",
+      selector: (row) => (
+        <div className="flex ">
+          <span
+            className="hover: mr-2 h-8 w-8 cursor-pointer
+                          text-[#EE3D3D] hover:text-[#d63737]"
+            onClick={() => {
+              handleModalRincian(row.id);
+            }}
+          >
+            <Edit />
+          </span>
+          <span
+            className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
+            onClick={() => {
+              handlePlay(row.id);
+            }}
+          >
+            <Play />
+          </span>
+        </div>
+      ),
+      // width: "150px",
     },
   ];
 
-  const columns = useMemo(() => columnsTugas, []);
-  const data = useMemo(() => sortTugasTidakDirencanakanMendesak, []);
-  const tableInstance = useTable({
-    columns,
-    data,
-  });
-
-  console.log(tableInstance);
-
-  console.log(sortTugasTidakDirencanakanMendesak);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
   return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup, idx) => (
-          <tr {...headerGroup.getHeaderGroupProps} key={idx}>
-            {headerGroup.headers.map((column, idx) => (
-              <th key={idx} {...column.getHeaderProps()}>
-                {column.render("Header")}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, idx) => {
-          prepareRow(row);
-          return (
-            <tr key={idx} {...row.getRowProps()}>
-              {row.cells.map((cell, idx) => {
-                return (
-                  <td key={idx} {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <DataTable
+      columns={columnsTugasHariIni}
+      data={sortTugasTidakDirencanakanMendesak}
+      className="w-full rounded-xl bg-white text-left shadow-lg"
+      customStyles={customStyles}
+    />
   );
 };
 

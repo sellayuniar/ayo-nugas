@@ -1,6 +1,6 @@
 import React from "react";
 
-const CloseBtn = () => {
+const CloseBtn = ({ color }) => {
   return (
     <svg
       width={18}
@@ -11,7 +11,7 @@ const CloseBtn = () => {
     >
       <path
         d="M4.5 15.9085L13.5 5.375M4.5 5.375L13.5 15.9085"
-        stroke="#FEFEFE"
+        stroke={`${color ? color : "#FEFEFE"}`}
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"

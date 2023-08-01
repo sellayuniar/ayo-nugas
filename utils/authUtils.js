@@ -1,13 +1,13 @@
 export const isFormatNPMCorrect = (propsIsFormatNPMCorrect) => {
   const { npmUser, setErrMsg, setOpenModal } = propsIsFormatNPMCorrect;
   let isValid = true;
-  const NPMSifo = npmUser.toString().slice(2, 7);
-  if (NPMSifo !== "08201") {
+  const NPMSifo = npmUser.toString().slice(2, 5);
+  if (NPMSifo !== "082") {
     setOpenModal(true);
-    setErrMsg("npm tidak sesuai");
+    setErrMsg("Format npm tidak sesuai!");
     isValid = false;
   }
-  // console.log(NPMSifo);
+  console.log(NPMSifo);
   return isValid;
 };
 
@@ -19,7 +19,7 @@ export const isNPMRegistered = (propsIsNPMRegistered) => {
   );
   if (searchNPM.length >= 1) {
     setOpenModal(true);
-    setErrMsg("Npm terdaftar");
+    setErrMsg("Npm telah terpakai!");
     isValid = false;
   }
   // console.log(searchNPM);

@@ -85,6 +85,7 @@ const Daftar = () => {
                   "Universitas Pembangunan Nasional Veteran Jawa Timur",
                 jurusan: "Sistem Informasi",
                 bio: "",
+                photo: "",
               });
               setOpenModalSukses(true);
             }

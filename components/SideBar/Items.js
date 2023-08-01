@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { dataSidebarLink } from "@/data/dataSidebarLink";
 import { useStateContext } from "@/context/ContextProvider";
+import { useRouter } from "next/router";
 
 const style = {
   active: `font-normal mx-4 text-sm text-blue-600`,
@@ -10,24 +11,32 @@ const style = {
 };
 
 const SidebarNavItems = () => {
-  const [clicked, setClicked] = useState(false);
+  // const [clicked, setClicked] = useState(false);
+  // const [activeLink, setActiveLink] = useState(null);
 
-  const handleClick = () => {
-    setClicked(!clicked);
-  };
+  // const handleClick = () => {
+  //   setClicked(!clicked);
+  // };
+
+  const router = useRouter();
 
   return (
-    <ul className="mt-6 md:pl-6">
+    <ul className="mt-6 px-5 lg:px-2">
       <li>
         {dataSidebarLink.map((item) => (
           <Link
             href={item.slug}
-            className={`${clicked ? style.active : style.inactive} my-10 flex`}
+            className={`${
+              router.pathname === item.slug
+                ? "bg-[#F05050] text-white  shadow-lg"
+                : ""
+            } my-7 mr-2 flex items-center rounded-full px-4 py-2.5 text-[#404040]`}
             key={item.id}
-            onClick={handleClick}
           >
-            <span>{item.icon}</span>
-            <span className="pl-3">{item.title}</span>
+            <span className="h-8 w-8">
+              {router.pathname === item.slug ? item.iconActive : item.icon}
+            </span>
+            <span className="pl-2 font-medium">{item.title}</span>
           </Link>
         ))}
       </li>

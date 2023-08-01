@@ -2,28 +2,17 @@ import React, { useState, useEffect } from "react";
 import Edit from "@/assets/icons/Edit";
 import Play from "@/assets/icons/Play";
 import DataTable from "react-data-table-component";
-import Spinner from "../Spinner";
+import { useTimer } from "@/utils/timer";
+import moment from "moment";
 
 const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
   const { sortTugasHariIni, formatDateTime, handlePlay, handleModalRincian } =
     propsTugasUtamaHariIni;
 
-  const [pending, setPending] = useState(true);
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setRows(sortTugasHariIni);
-      setPending(false);
-    }, 2000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const customStyles = {
     table: {
       style: {
-        padding: pending && "50px 0",
+        // padding: pending && "50px 0",
         // height: pending && "100px",
       },
     },
@@ -72,42 +61,45 @@ const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
     },
   };
 
+  const currentTime = useTimer();
+
   const columnsTugasHariIni = [
     {
       name: "No.",
       selector: (row, idx) => idx + 1,
-      width: "80px",
+      width: "50px",
       center: true,
     },
     {
       name: "Judul Tugas",
       selector: (row) => row.judul_tugas,
       sortable: true,
-      minWidth: "250px",
+      minWidth: "150px",
     },
     {
       name: "Waktu Pengerjaan",
       selector: (row) => formatDateTime(row.waktu_pengerjaan),
       sortable: true,
-      width: "200px",
+      minWidth: "200px",
     },
     {
       name: "Status",
       selector: (row) => row.status,
       sortable: true,
+      minWidth: "100px",
     },
     {
       name: "Estimasi",
       selector: (row) => row.estimasi,
       sortable: true,
-      width: "150px",
+      minWidth: "50px",
       center: true,
     },
     {
       name: "Real",
       selector: (row) => row.real,
       sortable: true,
-      width: "100px",
+      minWidth: "50px",
       center: true,
     },
     {
@@ -126,28 +118,30 @@ const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
           <span
             className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
             onClick={() => {
-              handlePlay(row.id);
+              if (
+                row.status === "Belum Dikerjakan" &&
+                moment(currentTime).isAfter(moment(row.waktu_pengerjaan))
+              ) {
+                alert("perbarui waktu pengerjaan");
+              } else {
+                handlePlay(row.id);
+              }
             }}
           >
             <Play />
           </span>
         </div>
       ),
-      width: "150px",
+      // width: "150px",
     },
   ];
 
   return (
     <DataTable
       columns={columnsTugasHariIni}
-      data={rows}
+      data={sortTugasHariIni}
       className="w-full rounded-xl bg-white text-left shadow-lg"
       customStyles={customStyles}
-      progressPending={pending}
-      progressComponent={
-        <Spinner textColor="text-[#F05050]" height={10} width={10} />
-      }
-      responsive={true}
     />
   );
 };

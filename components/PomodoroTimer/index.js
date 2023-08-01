@@ -5,6 +5,9 @@ import BellMp3 from "@/public/media/bell.mp3";
 import { db } from "@/config/firebase";
 import { updateDoc, getDoc, doc } from "firebase/firestore";
 import Head from "next/head";
+import Fire from "@/assets/icons/Fire";
+import Music from "@/assets/icons/Music";
+import Star from "@/assets/icons/Star";
 
 // assets
 const clockLoop = new Howl({
@@ -41,6 +44,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     propsPomodoroTimer;
   const [mode, setMode] = useState("pomodoro");
   const [getDataStatus, setGetDataStatus] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     if (isPlay) {
@@ -73,6 +77,23 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    const u = new SpeechSynthesisUtterance("Tinggal 2 Menit lagi");
+
+    u.lang = "id-ID";
+
+    console.log(timeMin === 2 && timeSec === 0);
+    if (timeMin === 2 && timeSec === 0) {
+      synth.speak(u);
+    }
+
+    return () => {
+      synth.cancel();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeMin, timeSec]);
 
   useEffect(() => {
     if (isRunning) {
@@ -198,22 +219,39 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
             {timeSec < 10 ? `0${timeSec}` : timeSec}
           </title>
         </Head>
-        <span className={`${mode === "pomodoro" && "text-xl font-bold"} mx-5`}>
-          <h2>Pomodoro</h2>
-        </span>
         <span
           className={`${
-            mode === "istirahat-pendek" && "text-xl font-bold"
-          } mx-10`}
-        >
-          <h2>Istirahat Pendek</h2>
-        </span>
-        <span
-          className={`${
-            mode === "istirahat-panjang" && "text-xl font-bold"
+            mode === "pomodoro" && "text-xl font-bold text-[#F05050]"
           } mx-5`}
         >
-          <h2>Istirahat Panjang</h2>
+          <h2 className="hidden md:block">Pomodoro</h2>
+          <span className={`block h-8 w-8 md:hidden`}>
+            {mode === "pomodoro" ? <Fire color="#F05050" /> : <Fire />}
+          </span>
+        </span>
+        <span
+          className={`${
+            mode === "istirahat-pendek" && "text-xl font-bold text-[#F05050]"
+          } mx-10`}
+        >
+          <h2 className="hidden md:block">Istirahat Pendek</h2>
+          <span className="block h-8 w-8 md:hidden">
+            {mode === "istirahat-pendek" ? (
+              <Music color="#F05050" />
+            ) : (
+              <Music />
+            )}
+          </span>
+        </span>
+        <span
+          className={`${
+            mode === "istirahat-panjang" && "text-xl font-bold text-[#F05050]"
+          } mx-5`}
+        >
+          <h2 className="hidden md:block">Istirahat Panjang</h2>
+          <span className="block h-8 w-8 md:hidden">
+            {mode === "istirahat-panjang" ? <Star color="#F05050" /> : <Star />}
+          </span>
         </span>
       </div>
       <div className="mt-16 flex flex-col items-center justify-center">
@@ -232,7 +270,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           </div>
         </div>
 
-        <div className="mt-8 flex">
+        <div className="mt-8 flex flex-col items-center md:flex-row">
           {isRunning ? (
             <button
               className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
@@ -241,14 +279,12 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
               Berhenti Sebentar
             </button>
           ) : (
-            <>
-              <button
-                className=" mr-3 rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
-                onClick={startTimer}
-              >
-                Mulai
-              </button>
-            </>
+            <button
+              className="mb-2 rounded-full bg-[#F16464] px-14 py-2 text-white shadow-md hover:bg-[#d63737] md:mr-3"
+              onClick={startTimer}
+            >
+              Mulai
+            </button>
           )}
           {onPause && (
             <button
@@ -259,7 +295,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
             </button>
           )}
         </div>
-        <div className="mt-3">
+        <div className="mt-5">
           <h1>
             #{dataTugas.judul !== "" ? dataTugas.judul : "Pomodoro"}{" "}
             {workInterval}/

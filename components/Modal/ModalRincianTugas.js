@@ -13,6 +13,9 @@ import { db } from "@/config/firebase";
 import { updateDoc, getDoc, doc, deleteDoc } from "firebase/firestore";
 import moment from "moment";
 import Spinner from "../Spinner";
+import Trash from "@/assets/icons/Trash";
+import ModalKonfirmasiHapus from "@/components/ModalMessage/ModalKonfirmasiHapus";
+import ModalPesanSukses from "../ModalMessage/ModalPesanSukses";
 
 const ModalUbahTugas = ({ propsRincianTugas }) => {
   const { openModalRincian, setOpenModalRincian, setFetchStatus, idTugas } =
@@ -30,6 +33,9 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
   });
   const [ubahData, setUbahData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [pesan, setPesan] = useState("");
+  const [modalBerhasil, setModalBerhasil] = useState(false);
 
   const closeModal = () => {
     setOpenModalRincian(false);
@@ -69,15 +75,6 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
     }
   };
 
-  const handleDelete = async () => {
-    setLoading(true);
-    const tugasDocRef = doc(db, "tugas", idTugas || "");
-    await deleteDoc(tugasDocRef);
-    setFetchStatus(true);
-    setOpenModalRincian(false);
-    setLoading(false);
-  };
-
   const handleUbahTugas = async (e) => {
     setLoading(true);
     const tugasDocRef = doc(db, "tugas", idTugas || "");
@@ -94,12 +91,32 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
     });
     setFetchStatus(true);
     setUbahData(false);
-    setOpenModalRincian(false);
     setLoading(false);
+    setPesan(`Tugas ${dataTugas.judul} Berhasil Diubah!`);
+    setModalBerhasil(true);
   };
 
   const waktuPengerjaanFormat = (date) => {
     return moment(date).format("DD/MM/YY HH:mm");
+  };
+
+  const modalSuksesProps = {
+    modalBerhasil,
+    setModalBerhasil,
+    setOpenModalRincian,
+    setFetchStatus,
+    pesan,
+  };
+
+  const modalHapusProps = {
+    loading,
+    openModal,
+    setOpenModal,
+    idTugas,
+    setLoading,
+    setFetchStatus,
+    setOpenModalRincian,
+    dataTugas,
   };
 
   return (
@@ -110,7 +127,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
         size="4xl"
         position="top-center"
         root={rootRef.current ?? undefined}
-        className="h-[1500px] md:h-full"
+        className="h-full"
       >
         {/* <Modal.Header /> */}
         <Modal.Body>
@@ -341,9 +358,14 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                 ) : (
                   <div className="flex items-center justify-between">
                     <span
-                      onClick={handleDelete}
-                      className="flex  h-12 w-56 cursor-pointer items-center justify-center rounded-full border-2 border-[#F05050] font-semibold text-[#F05050]"
+                      onClick={() => {
+                        setOpenModal(true);
+                      }}
+                      className="mx-3  flex h-12 w-56 cursor-pointer items-center justify-center rounded-full border-2 border-[#F05050] font-semibold text-[#F05050]"
                     >
+                      <span className="mr-2 h-7 w-7">
+                        <Trash />
+                      </span>
                       Hapus Data
                     </span>
                     <span
@@ -360,6 +382,8 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
             </div>
           </div>
         </Modal.Body>
+        <ModalKonfirmasiHapus modalHapusProps={modalHapusProps} />
+        <ModalPesanSukses modalSuksesProps={modalSuksesProps} />
         {/* <Modal.Footer/> */}
       </Modal>
     </div>

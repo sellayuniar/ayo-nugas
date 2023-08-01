@@ -11,21 +11,19 @@ import {
   startOfWeek,
   endOfWeek,
   getDayBetweenDates,
-  formatDateReverse,
   formatDate,
-  formatDateWithDay,
   formatDateWithFullDay,
 } from "utils/dateUtils";
-
 import ModalKonfirmasiKirimEmail from "@/components/ModalMessage/ModalKonfirmasiKirimEmail";
 import ModalKonfirmasiUnduh from "@/components/ModalMessage/ModalKonfirmasiUnduh";
+import RangeDate from "@/components/RangeDate";
 
 const Laporan = () => {
   const { state, handleFunctions } = useContext(GlobalContext);
   const { semuaTugas, user } = state;
   const { getDataTugas, getUser } = handleFunctions;
-  const [startDate, setStartDate] = useState(formatDateReverse(startOfWeek));
-  const [endDate, setEndDate] = useState(formatDateReverse(endOfWeek));
+  const [startDate, setStartDate] = useState(startOfWeek);
+  const [endDate, setEndDate] = useState(endOfWeek);
   const [openModalEmail, setOpenModalEmail] = useState(false);
   const [openModalUnduh, setOpenModalUnduh] = useState(false);
 
@@ -129,75 +127,64 @@ const Laporan = () => {
     endDate,
   };
 
+  const dateProps = { startDate, setStartDate, endDate, setEndDate };
+
   return (
     <Layout>
       <div className="mx-5 mb-32 mt-5">
         <h1 className="text-3xl font-semibold">Laporan</h1>
         <div className="mt-10 flex flex-col">
-          <div className="flex justify-between">
+          <div className="flex flex-wrap justify-between gap-5">
             <div className="flex">
               <button
-                className="w-56 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                className="mr-3 w-36 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleUnduhPDF}
               >
                 Unduh PDF
               </button>
               <button
-                className="w-56 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                className="w-36 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleKirimEmail}
               >
                 Kirim Ke Email
               </button>
             </div>
             <div>
-              <span className="text-md w-full rounded-lg bg-white p-5 font-semibold">
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
-                  }}
-                  className="mt-2 w-full rounded-full border-none focus:border-red-300 focus:outline-none focus:ring-0 md:w-[200px] lg:w-[150px]"
-                />
-                -
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => {
-                    setEndDate(e.target.value);
-                  }}
-                  className="mt-2 w-full rounded-full border-none focus:border-red-300 focus:outline-none focus:ring-0 md:w-[200px] lg:w-[150px]"
-                />
-              </span>
+              <RangeDate dateProps={dateProps} />
             </div>
           </div>
 
-          <div className="mb-3 mt-10 flex flex-col justify-between md:flex-row">
-            <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
-            <MiniCard
-              title={"Total Pomodoro Hari ini"}
-              data={getTotalPomodoroHariIni()}
-            />
-            <MiniCard
-              title={"Total Tugas Selesai"}
-              data={getTotalTugasSelesai()}
-            />
-            <MiniCard
-              title={"Total Tugas Selesai Hari ini"}
-              data={getTotalTugasHariIni()}
-            />
+          <div className="mb-3 mt-10 flex flex-col justify-between xl:flex-row">
+            <div className="flex">
+              <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
+              <MiniCard
+                title={"Total Pomodoro Hari ini"}
+                data={getTotalPomodoroHariIni()}
+              />
+            </div>
+            <div className="flex">
+              <MiniCard
+                title={"Total Tugas Selesai"}
+                data={getTotalTugasSelesai()}
+              />
+
+              <MiniCard
+                title={"Total Tugas Selesai Hari ini"}
+                data={getTotalTugasHariIni()}
+              />
+            </div>
           </div>
 
           {/* grafik */}
-          <div className="my-5 flex justify-between">
-            <div className="mr-3 h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+          <div className="my-5 flex flex-col justify-between xl:flex-row">
+            <div className="mb-5 mr-3 h-[450px] w-full rounded-lg bg-white p-5 pb-20 shadow-lg lg:w-[750px] xl:w-[525px]">
               <h2 className="mb-3 text-xl font-semibold">Total Waktu Fokus</h2>
               <TotalPomodoro
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
               />
             </div>
-            <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+            <div className="h-[450px] rounded-lg bg-white p-5 pb-20 shadow-lg lg:w-[750px] xl:w-[525px]">
               <h2 className="mb-3 text-xl font-semibold">
                 Proporsi Waktu Fokus
               </h2>
@@ -208,15 +195,15 @@ const Laporan = () => {
             </div>
           </div>
 
-          <div className="my-5 flex justify-between">
-            <div className="mr-3 h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+          <div className="my-5 flex flex-col justify-between xl:flex-row ">
+            <div className="mb-5 mr-3 h-[450px] rounded-lg bg-white p-5 pb-20 shadow-lg lg:w-[750px] xl:w-[525px]">
               <h2 className="mb-3 text-xl font-semibold">Total Pomodoro</h2>
               <TotalWaktuFokus
                 dataPomodoro={getTugasSelesai()}
                 dateList={dateList}
               />
             </div>
-            <div className="h-[450px] w-3/5 rounded-lg bg-white p-5 pb-20 shadow-lg">
+            <div className="h-[450px] rounded-lg bg-white p-5 pb-20 shadow-lg lg:w-[750px] xl:w-[525px]">
               <h2 className="mb-3 text-xl font-semibold">
                 Total Tugas Selesai
               </h2>
