@@ -313,7 +313,7 @@ const InventarisTugas = () => {
                 ) : filteredData.length < 1 ? (
                   <tr>
                     <td colSpan={7} className="py-10 text-center">
-                      Data tugas tidak ditemukan!
+                      Data tugas belum ditambahkan!
                     </td>
                   </tr>
                 ) : filteredDataWithDate < 1 ? (

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Spinner from "../Spinner";
 
 const Weather = () => {
   const [lat, setLat] = useState([]);
@@ -35,7 +36,12 @@ const Weather = () => {
         <>
           <p className="mb-2 text-2xl font-semibold">{weatherData.name}</p>
           <p className="text-2xl font-semibold">
-            {Math.ceil(weatherData?.main?.temp)} &deg;C
+            {isNaN(Math.ceil(weatherData?.main?.temp)) ? (
+              <Spinner textColor="#F05050" />
+            ) : (
+              Math.ceil(weatherData?.main?.temp)
+            )}{" "}
+            &deg;C
           </p>
         </>
       ) : (

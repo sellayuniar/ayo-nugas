@@ -136,10 +136,10 @@ const TugasHariIni = () => {
             <PomodoroTimer propsPomodoroTimer={propsPomodoroTimer} />
           </div>
           <div className="flex flex-col">
-            <div className="lg:w- mb-10 h-32 w-full rounded-lg bg-white p-5  shadow-lg lg:ml-5">
+            <div className="mb-5 h-1/2 w-full rounded-lg bg-white p-5 shadow-lg lg:ml-5 lg:w-full">
               <Clock />
             </div>
-            <div className="h-32 w-full rounded-lg bg-white p-5 shadow-lg lg:ml-5 lg:w-full">
+            <div className="h-1/2 w-full rounded-lg bg-white p-5 shadow-lg lg:ml-5 lg:w-full">
               <Weather />
             </div>
           </div>

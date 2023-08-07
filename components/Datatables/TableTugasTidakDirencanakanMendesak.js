@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import Edit from "@/assets/icons/Edit";
 import Play from "@/assets/icons/Play";
-import Spinner from "../Spinner";
 import DataTable from "react-data-table-component";
+import ModalGagal from "../ModalMessage/ModalGagal";
+import moment from "moment";
+import { useTimer } from "@/utils/timer";
 
 const TableTugasTidakDirencanakanMendesak = ({
   propsTugasTidakDirencakanMendesak,
@@ -14,6 +16,27 @@ const TableTugasTidakDirencanakanMendesak = ({
     handlePlay,
     handleModalRincian,
   } = propsTugasTidakDirencakanMendesak;
+
+  const [openModal, setOpenModal] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+
+  const modalProps = { openModal, setOpenModal, errMsg };
+
+  const currentTime = useTimer();
+
+  const handleWaktuPengerjaan = (data) => {
+    if (
+      data.status === "Belum Dikerjakan" &&
+      moment(currentTime).isAfter(moment(data.waktu_pengerjaan))
+    ) {
+      setErrMsg(
+        "Waktu pengerjaan tugas telah terlewat, mohon perbarui waktu pengerjaan tugas!"
+      );
+      setOpenModal(true);
+    } else {
+      handlePlay(data.id);
+    }
+  };
 
   const customStyles = {
     table: {
@@ -122,7 +145,7 @@ const TableTugasTidakDirencanakanMendesak = ({
           <span
             className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
             onClick={() => {
-              handlePlay(row.id);
+              handleWaktuPengerjaan(row);
             }}
           >
             <Play />
@@ -134,12 +157,15 @@ const TableTugasTidakDirencanakanMendesak = ({
   ];
 
   return (
-    <DataTable
-      columns={columnsTugasHariIni}
-      data={sortTugasTidakDirencanakanMendesak}
-      className="w-full rounded-xl bg-white text-left shadow-lg"
-      customStyles={customStyles}
-    />
+    <>
+      <DataTable
+        columns={columnsTugasHariIni}
+        data={sortTugasTidakDirencanakanMendesak}
+        className="w-full rounded-xl bg-white text-left shadow-lg"
+        customStyles={customStyles}
+      />
+      <ModalGagal modalProps={modalProps} />
+    </>
   );
 };
 

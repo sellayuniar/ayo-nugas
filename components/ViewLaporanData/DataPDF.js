@@ -1,5 +1,13 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+// import LogoDalam from "@/public/logo_dalam.png";
 
 const DataPDF = ({
   dataTugasSelesai,
@@ -70,14 +78,32 @@ const DataPDF = ({
       padding: 16,
       fontSize: 12,
     },
+    img: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      objectFit: "fill",
+      width: "125px",
+      height: "25px",
+    },
+    headerTitle: {
+      display: "flex",
+      marginBottom: "16px",
+    },
   });
   let no = 1;
+  // const logoDalam = require("@/public/logo_dalam.png");
 
   return (
     <Document>
       <Page size="A4" style={styles.page} orientation="landscape">
         <View style={styles.section}>
           <View>
+            <Image src="./logo_dalam.png" alt="logo" style={styles.img} />
+          </View>
+          <View className={styles.headerTitle}>
             <Text style={styles.text}>Laporan Pengerjaan Tugas</Text>
           </View>
           <View>

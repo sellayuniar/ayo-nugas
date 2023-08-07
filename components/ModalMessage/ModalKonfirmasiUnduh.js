@@ -34,19 +34,24 @@ export default function ModalKonfirmasiUnduh({ modalPropsUnduh }) {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="flex flex-col items-center justify-center">
-            <ImgGagal />
-            <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Apakah anda yakin ingin mengirim mengunduh laporan?
-            </h3>
-            <div className="flex justify-between gap-4">
-              <Button
+          <div className="mb-5 flex flex-col items-center justify-center">
+            <div>
+              <h3 className="mb-5 text-lg font-normal text-[#404040] dark:text-gray-400">
+                Apakah anda yakin ingin mengirim mengunduh laporan?
+              </h3>
+              <p className="text-sm text-[#888888]">
+                Detail tugas yang telah dikerjakan akan dibuatkan dalam format
+                PDF
+              </p>
+            </div>
+            <div className="mt-10 flex items-center justify-between gap-4">
+              <button
                 color="failure"
-                className="w-32"
+                className="mr-10  flex h-10 w-32 cursor-pointer items-center justify-center rounded-full border-2 border-[#F05050] font-semibold text-[#F05050] hover:border-[#d63737] hover:text-[#d63737]"
                 onClick={() => setOpenModalUnduh(false)}
               >
                 Batal
-              </Button>
+              </button>
               {isClient ? (
                 <PDFDownloadLink
                   document={
@@ -59,11 +64,11 @@ export default function ModalKonfirmasiUnduh({ modalPropsUnduh }) {
                       formatDateWithFullDay={formatDateWithFullDay}
                     />
                   }
-                  className="text-md mr-5 flex w-32 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737]"
+                  className="flex h-10 w-36  items-center justify-center rounded-full bg-[#F05050] font-semibold text-white shadow-md hover:bg-[#d63737]"
                   fileName={`Laporan Tugas ${startDate} - ${endDate}`}
                   onClick={() => setOpenModalUnduh(false)}
                 >
-                  Yakin
+                  Ya, unduh
                 </PDFDownloadLink>
               ) : null}
             </div>

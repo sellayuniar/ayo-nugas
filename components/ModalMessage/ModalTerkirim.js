@@ -2,15 +2,20 @@ import ImgSukses from "@/assets/ImgSvg/imgSukses";
 import { Button, Modal } from "flowbite-react";
 
 export default function ModalTerkirim({ modalTerkirimProps }) {
-  const { openModal, setOpenModal, pesan } = modalTerkirimProps;
+  const { openModalTerkirim, setOpenModalTerkirim, pesan } = modalTerkirimProps;
 
   const handleClose = () => {
-    setOpenModal(false);
+    setOpenModalTerkirim(false);
   };
 
   return (
     <>
-      <Modal show={openModal === true} size="md" popup onClose={handleClose}>
+      <Modal
+        show={openModalTerkirim === true}
+        size="md"
+        popup
+        onClose={handleClose}
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="flex flex-col items-center justify-center">

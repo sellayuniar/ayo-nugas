@@ -47,7 +47,7 @@ const Daftar = () => {
       if (dataUser.password !== confirmPassword) {
         isValid = false;
         setOpenModal(true);
-        setErrMsg("Konfirmasi kata sandi tidak sesuai");
+        setErrMsg("Konfirmasi kata sandi tidak sesuai!");
       }
     }
     return isValid;
@@ -81,8 +81,7 @@ const Daftar = () => {
                 nama_depan: dataUser.nama_depan,
                 nama_belakang: dataUser.nama_belakang,
                 email: dataUser.email,
-                universitas:
-                  "Universitas Pembangunan Nasional Veteran Jawa Timur",
+                universitas: "UPN Veteran Jawa Timur",
                 jurusan: "Sistem Informasi",
                 bio: "",
                 photo: "",

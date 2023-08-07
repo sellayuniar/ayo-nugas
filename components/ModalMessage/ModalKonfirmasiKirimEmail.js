@@ -3,6 +3,7 @@ import { Button, Modal } from "flowbite-react";
 import emailjs from "emailjs-com";
 import { useState } from "react";
 import ModalTerkirim from "./ModalTerkirim";
+import Cookies from "js-cookie";
 
 export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
   const {
@@ -16,7 +17,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
     endDate,
   } = modalPropsEmail;
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalTerkirim, setOpenModalTerkirim] = useState(false);
   const [pesan, setPesan] = useState(false);
 
   //send email
@@ -85,17 +86,18 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
 
   const handleKirimEmail = () => {
     sendEmail();
-
     setPesan("Email laporan berhasil dikirim!");
     setOpenModalEmail(false);
-    setOpenModal(true);
+    setOpenModalTerkirim(true);
   };
 
   const modalTerkirimProps = {
-    openModal,
-    setOpenModal,
+    openModalTerkirim,
+    setOpenModalTerkirim,
     pesan,
   };
+
+  const email = Cookies.get("email");
 
   return (
     <>
@@ -108,20 +110,27 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
         <Modal.Header />
         <Modal.Body>
           <div className="flex flex-col items-center justify-center">
-            <ImgGagal />
-            <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Apakah anda yakin ingin mengirim laporan ke email?
-            </h3>
-            <div className="flex justify-between gap-4">
-              <Button
-                color="failure"
+            <div>
+              <h3 className="my-5 text-lg font-normal text-[#404040] dark:text-gray-400">
+                Apakah anda yakin ingin mengirim laporan ke email?
+              </h3>
+              <p className="text-sm text-[#888888]">
+                Detail tugas yang telah dikerjakan dikirimkan ke email {email}
+              </p>
+            </div>
+            <div className="mb-5 mt-10 flex justify-between gap-4">
+              <button
+                className="mr-10  flex h-10 w-32 cursor-pointer items-center justify-center rounded-full border-2 border-[#F05050] font-semibold text-[#F05050] hover:border-[#d63737] hover:text-[#d63737]"
                 onClick={() => setOpenModalEmail(undefined)}
               >
                 Batal
-              </Button>
-              <Button color="failure" onClick={handleKirimEmail}>
-                Yakin
-              </Button>
+              </button>
+              <button
+                className="h-10 w-36  rounded-full bg-[#F05050] font-semibold text-white shadow-md hover:bg-[#d63737]"
+                onClick={handleKirimEmail}
+              >
+                Ya, kirim
+              </button>
             </div>
           </div>
         </Modal.Body>

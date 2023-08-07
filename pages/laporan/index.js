@@ -17,7 +17,8 @@ import {
 import ModalKonfirmasiKirimEmail from "@/components/ModalMessage/ModalKonfirmasiKirimEmail";
 import ModalKonfirmasiUnduh from "@/components/ModalMessage/ModalKonfirmasiUnduh";
 import RangeDate from "@/components/RangeDate";
-
+import Download from "@/assets/icons/Download";
+import Email from "@/assets/icons/Email";
 const Laporan = () => {
   const { state, handleFunctions } = useContext(GlobalContext);
   const { semuaTugas, user } = state;
@@ -137,15 +138,21 @@ const Laporan = () => {
           <div className="flex flex-wrap justify-between gap-5">
             <div className="flex">
               <button
-                className="mr-3 w-36 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
+                className="mr-3 flex w-36 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleUnduhPDF}
               >
+                <span className="mx-2 h-8 w-8">
+                  <Download />
+                </span>
                 Unduh PDF
               </button>
               <button
-                className="w-36 rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
+                className="flex w-36 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleKirimEmail}
               >
+                <span className="mx-2 h-8 w-8">
+                  <Email />
+                </span>
                 Kirim Ke Email
               </button>
             </div>
@@ -154,25 +161,22 @@ const Laporan = () => {
             </div>
           </div>
 
-          <div className="mb-3 mt-10 flex flex-col justify-between xl:flex-row">
-            <div className="flex">
-              <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
-              <MiniCard
-                title={"Total Pomodoro Hari ini"}
-                data={getTotalPomodoroHariIni()}
-              />
-            </div>
-            <div className="flex">
-              <MiniCard
-                title={"Total Tugas Selesai"}
-                data={getTotalTugasSelesai()}
-              />
+          <div className="mb-3 mt-10 flex w-full flex-col justify-between md:flex-row">
+            <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
+            <MiniCard
+              title={"Total Pomodoro Hari ini"}
+              data={getTotalPomodoroHariIni()}
+            />
 
-              <MiniCard
-                title={"Total Tugas Selesai Hari ini"}
-                data={getTotalTugasHariIni()}
-              />
-            </div>
+            <MiniCard
+              title={"Total Tugas Selesai"}
+              data={getTotalTugasSelesai()}
+            />
+
+            <MiniCard
+              title={"Total Tugas Selesai Hari ini"}
+              data={getTotalTugasHariIni()}
+            />
           </div>
 
           {/* grafik */}

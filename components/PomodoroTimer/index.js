@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useContext } from "react";
 import { Howl } from "howler";
 import ClockMp3 from "@/public/media/clock.mp3";
 import BellMp3 from "@/public/media/bell.mp3";
@@ -6,9 +7,10 @@ import { db } from "@/config/firebase";
 import { updateDoc, getDoc, doc } from "firebase/firestore";
 import Head from "next/head";
 import Fire from "@/assets/icons/Fire";
-import Music from "@/assets/icons/Music";
-import Star from "@/assets/icons/Star";
-
+import Mug from "@/assets/icons/Mug";
+import Relaxed from "@/assets/icons/Relaxed";
+import { sendNotification } from "@/utils/notifikasiUtils";
+import { GlobalContext } from "@/context/GlobalContext";
 // assets
 const clockLoop = new Howl({
   src: [ClockMp3],
@@ -32,7 +34,6 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     waktuPengerjaanReal: "",
     WaktuPengerjaanSelesai: "",
   });
-
   const [isRunning, setIsRunning] = useState(false);
   const [timeMin, setTimeMin] = useState(25);
   const [timeSec, setTimeSec] = useState(0);
@@ -44,7 +45,9 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     propsPomodoroTimer;
   const [mode, setMode] = useState("pomodoro");
   const [getDataStatus, setGetDataStatus] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const { state, handleFunctions } = useContext(GlobalContext);
+  const { user } = state;
+  const { getUser } = handleFunctions;
 
   useEffect(() => {
     if (isPlay) {
@@ -79,19 +82,20 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
   };
 
   useEffect(() => {
-    const synth = window.speechSynthesis;
-    const u = new SpeechSynthesisUtterance("Tinggal 2 Menit lagi");
+    getUser();
+  }, []);
 
-    u.lang = "id-ID";
+  console.log(user);
 
-    console.log(timeMin === 2 && timeSec === 0);
-    if (timeMin === 2 && timeSec === 0) {
-      synth.speak(u);
+  useEffect(() => {
+    if (timeMin === 5 && timeSec === 0 && !onBreak) {
+      return sendNotification(
+        user[0].nama_depan,
+        dataTugas.judul,
+        "tinggal 5 menit lagi"
+      );
     }
 
-    return () => {
-      synth.cancel();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeMin, timeSec]);
 
@@ -236,11 +240,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         >
           <h2 className="hidden md:block">Istirahat Pendek</h2>
           <span className="block h-8 w-8 md:hidden">
-            {mode === "istirahat-pendek" ? (
-              <Music color="#F05050" />
-            ) : (
-              <Music />
-            )}
+            {mode === "istirahat-pendek" ? <Mug color="#F05050" /> : <Mug />}
           </span>
         </span>
         <span
@@ -250,7 +250,11 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         >
           <h2 className="hidden md:block">Istirahat Panjang</h2>
           <span className="block h-8 w-8 md:hidden">
-            {mode === "istirahat-panjang" ? <Star color="#F05050" /> : <Star />}
+            {mode === "istirahat-panjang" ? (
+              <Relaxed color="#F05050" />
+            ) : (
+              <Relaxed />
+            )}
           </span>
         </span>
       </div>

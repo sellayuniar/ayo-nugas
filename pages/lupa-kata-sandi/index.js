@@ -9,8 +9,10 @@ import ModalTerkirim from "@/components/ModalMessage/ModalTerkirim";
 const LupaKataSandi = () => {
   const [emailUser, setEmailUser] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openModalTerkirim, setOpenModalTerkirim] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [pesan, setPesan] = useState(null);
+  const [errMsg, setErrMsg] = useState(null);
 
   const sendEmailReset = (e) => {
     setLoading(true);
@@ -19,18 +21,26 @@ const LupaKataSandi = () => {
       .then(() => {
         setLoading(false);
         setPesan("Email atur ulang kata sandi berhasil di kirim!");
-        setOpenModal(true);
+        setOpenModalTerkirim(true);
         console.log("Sending password reset");
       })
       .catch((error) => {
         setLoading(false);
+        setErrMsg("Email anda belum terdaftar!");
+        setOpenModal(true);
         const errorCode = error.code;
         const errorMessage = error.message;
+
         console.log(errorCode, errorMessage);
       });
   };
 
-  const modalTerkirimProps = { openModal, setOpenModal, pesan };
+  const modalTerkirimProps = {
+    openModalTerkirim,
+    setOpenModalTerkirim,
+    pesan,
+  };
+  const modalProps = { openModal, setOpenModal, errMsg };
   return (
     <div className="flex h-[730px] justify-center">
       <SideBarLupaKataSandi />
@@ -79,6 +89,7 @@ const LupaKataSandi = () => {
       </div>
       {/* <ModalGagal modalProps={modalProps} /> */}
       <ModalTerkirim modalTerkirimProps={modalTerkirimProps} />
+      <ModalGagal modalProps={modalProps} />
     </div>
   );
 };

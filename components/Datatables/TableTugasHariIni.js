@@ -4,10 +4,16 @@ import Play from "@/assets/icons/Play";
 import DataTable from "react-data-table-component";
 import { useTimer } from "@/utils/timer";
 import moment from "moment";
+import ModalGagal from "../ModalMessage/ModalGagal";
 
 const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
   const { sortTugasHariIni, formatDateTime, handlePlay, handleModalRincian } =
     propsTugasUtamaHariIni;
+
+  const [openModal, setOpenModal] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+
+  const modalProps = { openModal, setOpenModal, errMsg };
 
   const customStyles = {
     table: {
@@ -62,6 +68,20 @@ const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
   };
 
   const currentTime = useTimer();
+
+  const handleWaktuPengerjaan = (data) => {
+    if (
+      data.status === "Belum Dikerjakan" &&
+      moment(currentTime).isAfter(moment(data.waktu_pengerjaan))
+    ) {
+      setErrMsg(
+        "Waktu pengerjaan tugas telah terlewat, mohon perbarui waktu pengerjaan tugas!"
+      );
+      setOpenModal(true);
+    } else {
+      handlePlay(data.id);
+    }
+  };
 
   const columnsTugasHariIni = [
     {
@@ -118,14 +138,7 @@ const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
           <span
             className="h-8 w-8 cursor-pointer text-[#EE3D3D] hover:text-[#d63737]"
             onClick={() => {
-              if (
-                row.status === "Belum Dikerjakan" &&
-                moment(currentTime).isAfter(moment(row.waktu_pengerjaan))
-              ) {
-                alert("perbarui waktu pengerjaan");
-              } else {
-                handlePlay(row.id);
-              }
+              handleWaktuPengerjaan(row);
             }}
           >
             <Play />
@@ -137,12 +150,15 @@ const TableTugasHariIni = ({ propsTugasUtamaHariIni }) => {
   ];
 
   return (
-    <DataTable
-      columns={columnsTugasHariIni}
-      data={sortTugasHariIni}
-      className="w-full rounded-xl bg-white text-left shadow-lg"
-      customStyles={customStyles}
-    />
+    <>
+      <DataTable
+        columns={columnsTugasHariIni}
+        data={sortTugasHariIni}
+        className="w-full rounded-xl bg-white text-left shadow-lg"
+        customStyles={customStyles}
+      />
+      <ModalGagal modalProps={modalProps} />
+    </>
   );
 };
 
