@@ -16,7 +16,11 @@ const nextConfig = {
       use: {
         loader: "url-loader",
       },
+      resolve: {
+        extensions: [".js", ".jsx"],
+      },
     });
+
     return config;
   },
 };

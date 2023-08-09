@@ -4,7 +4,7 @@ import { auth, db } from "@/config/firebase";
 import { isFormatNPMCorrect, isNPMRegistered } from "@/utils/authUtils";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
-import SideBarLogin from "../../components/Sidebar/SideBarLogin";
+import SideBarLogin from "@/components/Sidebar/SideBarLogin";
 import ModalGagal from "@/components/ModalMessage/ModalGagal";
 import ModalSukses from "@/components/ModalMessage/ModalSukses";
 import Spinner from "@/components/Spinner";
