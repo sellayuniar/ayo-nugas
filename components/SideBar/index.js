@@ -15,7 +15,7 @@ const style = {
   default: `bg-white shadow h-screen overflow-y-auto top-0 lg:block lg:relative lg:w-64 lg:z-auto`,
 };
 
-export default function Sidebar({ mobilePosition }) {
+const Sidebar = ({ mobilePosition }) => {
   const { state } = useContext(GlobalContext);
   const { isSidebar } = state;
   return (
@@ -30,4 +30,6 @@ export default function Sidebar({ mobilePosition }) {
       </div>
     </aside>
   );
-}
+};
+
+export default Sidebar;
