@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import NavDashboard from "@/components/NavDashboard";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import Sidebar from "@/components/Sidebar/SideBar";
 import Footer from "@/components/Footer";
 
 const style = {
