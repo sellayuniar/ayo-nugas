@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
 import { dataSidebarLink } from "@/data/dataSidebarLink";
-import { useStateContext } from "@/context/ContextProvider";
 import { useRouter } from "next/router";
 
 const style = {
@@ -11,13 +9,6 @@ const style = {
 };
 
 const SidebarNavItems = () => {
-  // const [clicked, setClicked] = useState(false);
-  // const [activeLink, setActiveLink] = useState(null);
-
-  // const handleClick = () => {
-  //   setClicked(!clicked);
-  // };
-
   const router = useRouter();
 
   return (
