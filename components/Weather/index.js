@@ -5,21 +5,25 @@ const Weather = () => {
   const [lat, setLat] = useState([]);
   const [long, setLong] = useState([]);
   const [weatherData, setWeatherData] = useState([]);
+  const [err, setErrMsg] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       navigator.geolocation.getCurrentPosition(function (position) {
         setLat(position.coords.latitude);
         setLong(position.coords.longitude);
       });
-
-      await fetch(
-        `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&units=metric&APPID=2bbdb64d8ff4a310616bca146588b19a`
-      )
-        .then((res) => res.json())
-        .then((result) => {
-          setWeatherData(result);
-          console.log(result);
-        });
+      try {
+        await fetch(
+          `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&units=metric&APPID=2bbdb64d8ff4a310616bca146588b19a`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            setWeatherData(result);
+          });
+      } catch (err) {
+        setErrMsg(" Tidak dapat mengakses data cuaca!");
+      }
     };
     fetchData();
 
@@ -31,25 +35,23 @@ const Weather = () => {
   }, [lat, long]);
 
   return (
-    <div className="">
+    <>
       {weatherData ? (
         <>
           <p className="mb-2 text-2xl font-semibold">{weatherData.name}</p>
           <p className="text-2xl font-semibold">
-            {isNaN(Math.ceil(weatherData?.main?.temp)) ? (
+            {isNaN(Math.ceil(weatherData.main?.temp)) ? (
               <Spinner textColor="#F05050" />
             ) : (
-              Math.ceil(weatherData?.main?.temp)
+              Math.ceil(weatherData.main?.temp)
             )}{" "}
             &deg;C
           </p>
         </>
       ) : (
-        <p className="text-2xl font-semibold">
-          Tidak dapat mengakses data cuaca!
-        </p>
+        <p className="text-2xl font-semibold">{err}</p>
       )}
-    </div>
+    </>
   );
 };
 

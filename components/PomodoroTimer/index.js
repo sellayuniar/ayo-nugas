@@ -11,6 +11,8 @@ import Mug from "@/assets/icons/Mug";
 import Relaxed from "@/assets/icons/Relaxed";
 import { sendNotification } from "@/utils/notifikasiUtils";
 import { GlobalContext } from "@/context/GlobalContext";
+import moment from "moment";
+import ModalKonfirmasiBerhenti from "../ModalMessage/ModalKonfirmasiBerhenti";
 // assets
 const clockLoop = new Howl({
   src: [ClockMp3],
@@ -45,6 +47,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     propsPomodoroTimer;
   const [mode, setMode] = useState("pomodoro");
   const [getDataStatus, setGetDataStatus] = useState(false);
+  const [openModalBerhenti, setOpenModalBerhenti] = useState(false);
   const { state, handleFunctions } = useContext(GlobalContext);
   const { user } = state;
   const { getUser } = handleFunctions;
@@ -84,8 +87,6 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
   useEffect(() => {
     getUser();
   }, []);
-
-  console.log(user);
 
   useEffect(() => {
     if (timeMin === 5 && timeSec === 0 && !onBreak) {
@@ -213,6 +214,12 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     setFetchStatus(true);
   };
 
+  const modalBerhentiProps = {
+    stopTimer,
+    openModalBerhenti,
+    setOpenModalBerhenti,
+  };
+
   return (
     <>
       <div className="flex w-full items-center justify-center">
@@ -293,7 +300,11 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           {onPause && (
             <button
               className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
-              onClick={stopTimer}
+              onClick={() =>
+                dataTugas.judul !== ""
+                  ? setOpenModalBerhenti(true)
+                  : stopTimer()
+              }
             >
               Berhenti
             </button>
@@ -307,6 +318,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           </h1>
         </div>
       </div>
+      <ModalKonfirmasiBerhenti modalBerhentiProps={modalBerhentiProps} />
     </>
   );
 };

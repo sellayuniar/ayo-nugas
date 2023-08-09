@@ -1,74 +1,73 @@
-import ImgGagal from "@/assets/ImgSvg/ImgGagal";
 import { Modal } from "flowbite-react";
 import { db } from "@/config/firebase";
-import { doc, deleteDoc } from "firebase/firestore";
-import ModalPesanSukses from "./ModalPesanSukses";
+import { doc } from "firebase/firestore";
+import ModalSuksesHapusAkun from "./ModalSuksesHapusAkun";
 import { useState } from "react";
 import Spinner from "../Spinner";
+import { useRouter } from "next/router";
 
-export default function ModalKonfirmasiHapus({ modalHapusProps }) {
+export default function ModalKonfirmasiHapusAkun({ modalHapusAkunProps }) {
   const {
     loading,
-    openModal,
-    setOpenModal,
-    idTugas,
     setLoading,
-    setFetchStatus,
-    setOpenModalRincian,
-    dataTugas,
-  } = modalHapusProps;
+    openModalHapus,
+    setOpenModalHapus,
+    deleteDoc,
+    deleteUser,
+    dataUser,
+    currentUser,
+  } = modalHapusAkunProps;
   const [pesan, setPesan] = useState("");
   const [modalBerhasil, setModalBerhasil] = useState(false);
-
-  const handleDelete = async () => {
-    setLoading(true);
-    try {
-      const tugasDocRef = doc(db, "tugas", idTugas || "");
-      await deleteDoc(tugasDocRef);
-      setFetchStatus(true);
-      setOpenModal(false);
-      setLoading(false);
-      setPesan(`Tugas ${dataTugas.judul} berhasil dihapus!`);
-      setModalBerhasil(true);
-    } catch (err) {
-      setLoading(false);
-      alert(err.message);
-    }
-  };
 
   const modalSuksesProps = {
     modalBerhasil,
     setModalBerhasil,
-    setOpenModalRincian,
-    setFetchStatus,
     pesan,
+  };
+
+  const handleDelete = () => {
+    setLoading(true);
+    deleteUser(currentUser)
+      .then(() => {
+        const akunDocRef = doc(db, "pengguna", dataUser.idDoc || "");
+        deleteDoc(akunDocRef);
+        setPesan("Akun anda berhasil dihapus!");
+        setOpenModalHapus(false);
+        setModalBerhasil(true);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
 
   return (
     <>
       <Modal
-        show={openModal === true}
+        show={openModalHapus === true}
         size="md"
         popup
-        onClose={() => setOpenModal(undefined)}
+        onClose={() => setOpenModalHapus(undefined)}
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="flex flex-col items-center justify-center">
+          <div className="mb-5 flex flex-col items-center justify-center">
             <div className="mb-5">
               <h3 className="my-5 text-lg font-normal text-[#404040]">
-                Apakah kamu yakin untuk menghapus tugas?
+                Apakah kamu yakin untuk menghapus akun?
               </h3>
               <p className="text-sm text-[#888888] ">
-                Semua data yang berkaitan dengan tugas {dataTugas.judul} akan
-                dihapus secara permanen dan kamu tidak bisa melihatnya lagi
+                Semua data yang berkaitan dengan akunmu akan dihapus secara
+                permanen dan kamu tidak bisa melihatnya lagi
               </p>
             </div>
 
             <div className="mt-4 flex">
               <span
                 className=" mr-10  flex h-10 w-32 cursor-pointer items-center justify-center rounded-full border-2 border-[#F05050] font-semibold text-[#F05050] hover:border-[#d63737] hover:text-[#d63737]"
-                onClick={() => setOpenModal(undefined)}
+                onClick={() => setOpenModalHapus(undefined)}
               >
                 Batal
               </span>
@@ -82,7 +81,7 @@ export default function ModalKonfirmasiHapus({ modalHapusProps }) {
           </div>
         </Modal.Body>
       </Modal>
-      <ModalPesanSukses modalSuksesProps={modalSuksesProps} />
+      <ModalSuksesHapusAkun modalSuksesProps={modalSuksesProps} />
     </>
   );
 }

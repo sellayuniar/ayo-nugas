@@ -1,18 +1,12 @@
 import ImgSukses from "@/assets/ImgSvg/imgSukses";
 import { Button, Modal } from "flowbite-react";
 
-export default function ModalPesanSukses({ modalSuksesProps }) {
-  const {
-    modalBerhasil,
-    setModalBerhasil,
-    setOpenModalRincian,
-    setFetchStatus,
-    pesan,
-  } = modalSuksesProps;
+export default function ModalSuksesAkun({ modalSuksesProps }) {
+  const { modalBerhasil, setModalBerhasil, setFetchStatus, pesan } =
+    modalSuksesProps;
 
   const handleClose = () => {
     setFetchStatus(true);
-    setOpenModalRincian(false);
     setModalBerhasil(false);
   };
 

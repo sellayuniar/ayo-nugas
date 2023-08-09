@@ -42,6 +42,9 @@ const Masuk = () => {
       } else if (error.code === "auth/wrong-password") {
         setOpenModal(true);
         setErrMsg("Kata sandi salah!");
+      } else if (error.code === "auth/network-request-failed") {
+        setOpenModal(true);
+        setErrMsg("Tidak ada koneksi internet!");
       }
       setLoading(false);
     }

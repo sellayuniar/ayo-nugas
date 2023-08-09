@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import Layout from "@/widget/Layout";
-import Edit from "@/assets/icons/Edit";
-import Play from "@/assets/icons/Play";
 import ModalTugas from "@/components/Modal/ModalTambahTugas";
 import ModalRincian from "@/components/Modal/ModalRincianTugas";
 import { GlobalContext } from "@/context/GlobalContext";
@@ -22,7 +20,7 @@ const TugasHariIni = () => {
   const [tidakDirencanakanMendesak, setTidakDirencanakanMendesak] =
     useState(false);
   const { state, handleFunctions } = useContext(GlobalContext);
-  const { semuaTugas, loading } = state;
+  const { semuaTugas } = state;
   const { getDataTugas } = handleFunctions;
 
   useEffect(() => {
@@ -37,8 +35,6 @@ const TugasHariIni = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStatus, setFetchStatus]);
 
-  console.log(semuaTugas);
-
   const getDataTugasHariIni = () => {
     const today = moment().format("YYYY-MM-DD");
     const waktuPengerjaanFormat = (date) => {
@@ -47,7 +43,6 @@ const TugasHariIni = () => {
     const filterTugasByDate = semuaTugas.filter((data) =>
       waktuPengerjaanFormat(data.waktu_pengerjaan).includes(today)
     );
-
     return filterTugasByDate;
   };
 

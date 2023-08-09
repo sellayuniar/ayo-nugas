@@ -1,19 +1,15 @@
 import ImgSukses from "@/assets/ImgSvg/imgSukses";
 import { Button, Modal } from "flowbite-react";
+import { useRouter } from "next/router";
 
-export default function ModalPesanSukses({ modalSuksesProps }) {
-  const {
-    modalBerhasil,
-    setModalBerhasil,
-    setOpenModalRincian,
-    setFetchStatus,
-    pesan,
-  } = modalSuksesProps;
+export default function ModalSuksesHapusAkun({ modalSuksesProps }) {
+  const { modalBerhasil, setModalBerhasil, pesan } = modalSuksesProps;
+
+  const router = useRouter();
 
   const handleClose = () => {
-    setFetchStatus(true);
-    setOpenModalRincian(false);
     setModalBerhasil(false);
+    router.push("/");
   };
 
   return (

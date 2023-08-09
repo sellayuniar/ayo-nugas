@@ -39,8 +39,6 @@ const Daftar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // console.log(allUser);
-
   const validatePassword = () => {
     let isValid = true;
     if (dataUser.password !== "" && confirmPassword !== "") {
@@ -54,13 +52,10 @@ const Daftar = () => {
   };
 
   const npmUser = dataUser.npm;
-
   const modalProps = { openModal, setOpenModal, errMsg };
   const modalSuksesProps = { openModalSukses, setOpenModalSukses };
   const propsIsFormatNPMCorrect = { npmUser, setErrMsg, setOpenModal };
   const propsIsNPMRegistered = { allUser, npmUser, setErrMsg, setOpenModal };
-
-  console.log(dataUser.password, confirmPassword);
 
   const handleDaftar = async (e) => {
     e.preventDefault();
@@ -84,7 +79,6 @@ const Daftar = () => {
                 universitas: "UPN Veteran Jawa Timur",
                 jurusan: "Sistem Informasi",
                 bio: "",
-                photo: "",
               });
               setOpenModalSukses(true);
             }
@@ -96,17 +90,18 @@ const Daftar = () => {
       if (error.code === "auth/email-already-in-use") {
         setOpenModal(true);
         setErrMsg("email telah digunakan");
+      } else if (error.code === "auth/network-request-failed") {
+        setOpenModal(true);
+        setErrMsg("Tidak ada koneksi internet!");
       }
       setLoading(false);
     }
   };
 
-  console.log(errMsg);
-
   return (
     <div className="flex justify-center">
       <SideBarLogin />
-      <div className="mt-10 flex basis-6/12 flex-col lg:mx-24">
+      <div className="container mx-10 mt-10 flex basis-6/12 flex-col lg:mx-24">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
