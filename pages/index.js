@@ -1,4 +1,4 @@
-import NavBar from "@/components/Navbar/index.js";
+import NavBar from "@/components/NavBar";
 import CoverImg from "@/assets/ImgSvg/CoverImg";
 import { useRouter } from "next/router";
 import AccordionItems from "@/components/Accordion";
