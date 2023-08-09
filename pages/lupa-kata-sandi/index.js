@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SideBarLupaKataSandi from "@/components/Sidebar/SideBarLupaKataSandi";
+import SideBarLupaKataSandi from "@/components/SideView/SideBarLupaKataSandi";
 import Spinner from "@/components/Spinner";
 import ModalGagal from "@/components/ModalMessage/ModalGagal";
 import { auth } from "@/config/firebase";

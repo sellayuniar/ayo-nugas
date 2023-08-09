@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/router";
 import BtnDaftarOutline from "@/components/Buttons/BtnDaftarOutline";
-import SideBarLogin from "@/components/Sidebar/SideBarLogin";
+import SideBarLogin from "@/components/SideView/SideBarLogin";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import ModalGagal from "@/components/ModalMessage/ModalGagal";
