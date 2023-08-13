@@ -101,7 +101,7 @@ const Daftar = () => {
   return (
     <div className="flex justify-center">
       <SideBarLogin />
-      <div className="container mx-10 mt-10 flex basis-6/12 flex-col lg:mx-24">
+      <div className="container mx-10 ml-20 mt-10 flex basis-6/12 flex-col lg:mx-24">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
@@ -237,14 +237,13 @@ const Daftar = () => {
                 required
               />
             </div>
-            <div className="mt-10 flex w-full items-center justify-center">
-              <button
-                type="submit"
-                className="w-full rounded-full bg-[#F05050] px-80 py-2.5 text-center text-lg font-medium text-white sm:w-auto"
-              >
-                {loading ? <Spinner /> : "Daftar"}
-              </button>
-            </div>
+
+            <button
+              type="submit"
+              className=" w-full rounded-full bg-[#F05050] px-32 py-2.5 text-center text-lg font-medium text-white md:px-80"
+            >
+              {loading ? <Spinner /> : "Daftar"}
+            </button>
           </form>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import SidenavItems from "./Items";
 import SidenavHeader from "./Header";
-import css from "./index.module.css";
+// import css from "./index.module.css";
 import { useContext } from "react";
 import { GlobalContext } from "@/context/GlobalContext";
 

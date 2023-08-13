@@ -4,7 +4,7 @@ import Spinner from "../Spinner";
 const Weather = () => {
   const [lat, setLat] = useState([]);
   const [long, setLong] = useState([]);
-  const [weatherData, setWeatherData] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
   const [err, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -13,17 +13,17 @@ const Weather = () => {
         setLat(position.coords.latitude);
         setLong(position.coords.longitude);
       });
-      try {
-        await fetch(
-          `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&units=metric&APPID=2bbdb64d8ff4a310616bca146588b19a`
-        )
-          .then((res) => res.json())
-          .then((result) => {
-            setWeatherData(result);
-          });
-      } catch (err) {
-        setErrMsg(" Tidak dapat mengakses data cuaca!");
-      }
+
+      await fetch(
+        `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&units=metric&APPID=2bbdb64d8ff4a310616bca146588b19a`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          setWeatherData(result);
+        })
+        .catch((err) => {
+          setErrMsg("Tidak dapat mengambil data cuaca!");
+        });
     };
     fetchData();
 

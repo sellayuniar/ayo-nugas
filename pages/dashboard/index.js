@@ -6,15 +6,12 @@ import {
   endOfWeek,
   getDayBetweenDates,
   formatDate,
-  formatDateWithFullDay,
 } from "utils/dateUtils";
 import Docs from "@/assets/icons/Docs";
 import DocCheklist from "@/assets/icons/DocCheklist";
 import TotalTugasSelesai from "@/components/Diagram/TotalTugasSelesai";
 import TotalPomodoro from "@/components/Diagram/TotalPomodoro";
 import moment from "moment";
-import Calender from "@/assets/icons/Calender";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import RangeDate from "@/components/RangeDate";
 
@@ -102,8 +99,8 @@ const Dashboard = () => {
         </div>
         <div>
           <div className="my-5 flex justify-between">
-            <div className="mr-3 flex h-[150px] w-1/2 rounded-lg bg-white p-5 shadow-lg lg:w-[360px] xl:w-3/5">
-              <div className="mr-2 h-8 w-8 text-[#404040]">
+            <div className="mr-3 flex h-[200px] w-1/2 rounded-lg bg-white p-5 shadow-lg md:h-[150px] lg:w-[360px] xl:w-3/5">
+              <div className="mr-2 hidden h-8 w-8 text-[#404040] md:block">
                 <Docs />
               </div>
               <div>
@@ -115,8 +112,8 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-            <div className="mr-3 flex h-[150px] w-1/2 rounded-lg bg-white p-5 shadow-lg lg:w-[360px] xl:w-3/5">
-              <div className="mr-2 h-8 w-8 text-[#404040]">
+            <div className="mr-3 flex h-[200px] w-1/2 rounded-lg bg-white p-5 shadow-lg md:h-[150px] lg:w-[360px] xl:w-3/5">
+              <div className="mr-2 hidden h-8 w-8 text-[#404040] md:block">
                 <DocCheklist />
               </div>
               <div>
