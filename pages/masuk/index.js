@@ -125,7 +125,7 @@ const Masuk = () => {
                 autoComplete="off"
               />
             </div>
-            <div className="align-center mt-10 flex justify-between">
+            <div className="align-center mt-10 flex flex-col-reverse justify-between gap-5 md:flex-row">
               <Link href="/lupa-kata-sandi" className="text-[#F05050]">
                 Lupa Kata Sandi?
               </Link>
