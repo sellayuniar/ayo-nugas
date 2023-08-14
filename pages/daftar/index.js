@@ -101,7 +101,7 @@ const Daftar = () => {
   return (
     <div className="flex justify-center">
       <SideBarLogin />
-      <div className="container mx-10 ml-20 mt-10 flex basis-6/12 flex-col lg:mx-24">
+      <div className="container mx-10 mt-10 flex basis-6/12 flex-col lg:mx-24">
         <div>
           <div className="flex justify-end">
             <p className="text-md text-[#404040]">
