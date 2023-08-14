@@ -136,9 +136,9 @@ const Laporan = () => {
         <h1 className="text-3xl font-semibold">Laporan</h1>
         <div className="mt-10 flex flex-col">
           <div className="flex flex-wrap justify-between gap-5">
-            <div className="flex">
+            <div className="flex w-full flex-col gap-5 md:flex-row">
               <button
-                className="mr-3 flex w-36 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
+                className="mr-3 flex w-full items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleUnduhPDF}
               >
                 <span className="mx-2 h-8 w-8">
@@ -147,7 +147,7 @@ const Laporan = () => {
                 Unduh PDF
               </button>
               <button
-                className="flex w-36 items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
+                className="flex w-full items-center justify-center rounded-lg bg-[#F16464] py-2.5 font-semibold text-white shadow-lg hover:bg-[#d63737] md:w-56"
                 onClick={handleKirimEmail}
               >
                 <span className="mx-2 h-8 w-8">

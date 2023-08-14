@@ -28,8 +28,10 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
           data.id
         } style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #D9D9D9">
         <td style="width: 200px; text-align: center;">${idx + 1}</td>
-        <td style="width: 300px; text-align: center;">${data.judul_tugas}</td>
-        <td style="width: 300px; text-align: center;">${data.catatan}</td>
+        <td style="width: 300px;">${data.judul_tugas}</td>
+        <td style="width: 300px; text-align: center;">${
+          data.catatan ? data.catatan : "-"
+        }</td>
         <td style="width: 300px; text-align: center;">${formatDate(
           data.waktu_pengerjaan
         )}</td>
@@ -57,7 +59,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
       <thead>
         <tr style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D9D9D9">
           <th style="width: 200px; text-align: center;">No</th>
-          <th style="width: 300px; text-align: center;">Judul</th>
+          <th style="width: 300px; text-align: left;">Judul</th>
           <th style="width: 300px; text-align: center;">Catatan</th>  
           <th style="width: 300px; text-align: center;">Tanggal</th>
           <th style="width: 300px; text-align: center;">Tipe Tugas</th>

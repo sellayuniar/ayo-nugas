@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const RangeDate = ({ dateProps }) => {
   const { startDate, setStartDate, endDate, setEndDate } = dateProps;
   return (
-    <div className="mr-3 flex w-[290px] items-center justify-between rounded-lg bg-white px-4 py-2 shadow-md sm:w-[320px] md:w-[400px]">
+    <div className="mr-3 flex w-full items-center justify-between rounded-lg bg-white px-4 py-2 shadow-md sm:w-[320px] md:w-[400px]">
       <div className="flex items-center">
         <span className="mr-2 h-8 w-8">
           <Calender />

@@ -138,7 +138,7 @@ const Dashboard = () => {
             </div>
             <div className="mr-3 h-[450px] w-full rounded-lg bg-white p-5 pb-20 shadow-lg lg:w-[750px] xl:w-3/5">
               <h2 className="mb-5 text-xl font-semibold text-[#404040]">
-                Total Pomodoro
+                Total Tugas Selesai
               </h2>
               <TotalTugasSelesai
                 dataPomodoro={getTugasSelesai()}

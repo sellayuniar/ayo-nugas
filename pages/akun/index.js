@@ -71,23 +71,10 @@ const Akun = () => {
     const searchNPM = allUser.filter((data) =>
       data.npm?.toString().toLowerCase().includes(npmUser)
     );
-    if (searchNPM.length >= 1 && dataUser.NPM !== allUser[0].npm) {
+
+    if (searchNPM.length >= 1 && dataUser.NPM === allUser[0].npm) {
       setOpenModal(true);
       setErrMsg("Npm telah terpakai!");
-      isValid = false;
-    }
-    // console.log(searchNPM);
-    return isValid;
-  };
-
-  const isEmailRegistered = () => {
-    let isValid = true;
-    const searchEmail = allUser.filter((data) =>
-      data.email?.toString().toLowerCase().includes(dataUser.email)
-    );
-    if (searchEmail.length >= 1 && dataUser.email !== allUser[0].email) {
-      setOpenModal(true);
-      setErrMsg("Email telah digunakan!");
       isValid = false;
     }
     // console.log(searchNPM);
@@ -98,37 +85,36 @@ const Akun = () => {
     event.preventDefault();
     const akunDocRef = doc(db, "pengguna", dataUser.idDoc || "");
     setLoading(true);
-    try {
-      const updateAuthEmail = updateEmail(currentUser, dataUser.email);
-      if (isFormatNPMCorrect(propsIsFormatNPMCorrect)) {
-        if (isNPMRegistered()) {
-          if (isEmailRegistered()) {
-            if (updateAuthEmail) {
-              updateDoc(akunDocRef, {
-                nama_depan: dataUser.namaDepan,
-                nama_belakang: dataUser.namaBelakang,
-                npm: dataUser.NPM,
-                email: dataUser.email,
-                jurusan: dataUser.jurusan,
-                universitas: dataUser.universitas,
-                bio: dataUser.bio,
-              });
-              setPesan("Data Akun berhasil diperbarui!");
-              setModalBerhasil(true);
-              setUbahData(false);
+    if (isFormatNPMCorrect(propsIsFormatNPMCorrect)) {
+      if (isNPMRegistered()) {
+        updateEmail(currentUser, dataUser.email)
+          .then(() => {
+            updateDoc(akunDocRef, {
+              nama_depan: dataUser.namaDepan,
+              nama_belakang: dataUser.namaBelakang,
+              npm: dataUser.NPM,
+              email: dataUser.email,
+              jurusan: dataUser.jurusan,
+              universitas: dataUser.universitas,
+              bio: dataUser.bio,
+            });
+            setPesan("Data Akun berhasil diperbarui!");
+            setModalBerhasil(true);
+            setUbahData(false);
+            setLoading(false);
+          })
+          .catch((err) => {
+            if (err.code === "auth/email-already-in-use") {
+              setOpenModal(true);
+              setErrMsg("Email telah digunakan!");
+              setLoading(false);
             }
-          }
-        }
-      }
-      setLoading(false);
-    } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        setOpenModal(true);
-        setErrMsg("Email telah digunakan!");
-        setLoading(false);
+          });
       }
     }
+    setLoading(false);
   };
+
   const npmUser = dataUser.NPM;
   const propsIsFormatNPMCorrect = { npmUser, setErrMsg, setOpenModal };
   const modalProps = { openModal, setOpenModal, errMsg };
