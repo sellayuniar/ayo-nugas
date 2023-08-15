@@ -64,7 +64,7 @@ const Akun = () => {
     };
     getUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchStatus]);
 
   const isNPMRegistered = () => {
     let isValid = true;
@@ -72,7 +72,7 @@ const Akun = () => {
       data.npm?.toString().toLowerCase().includes(npmUser)
     );
 
-    if (searchNPM.length >= 1 && dataUser.NPM === allUser[0].npm) {
+    if (searchNPM.length >= 1 && dataUser.NPM !== allUser[0].npm) {
       setOpenModal(true);
       setErrMsg("Npm telah terpakai!");
       isValid = false;
@@ -102,6 +102,7 @@ const Akun = () => {
             setModalBerhasil(true);
             setUbahData(false);
             setLoading(false);
+            setFetchStatus(true);
           })
           .catch((err) => {
             if (err.code === "auth/email-already-in-use") {
