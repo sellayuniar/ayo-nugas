@@ -296,14 +296,16 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                           required
                         />
                       ) : (
-                        <div className="mt-2 flex h-[50px] items-center rounded-full border border-gray-200 px-3 md:w-[200px] lg:w-[230px]">
+                        <div className="flex h-[50px] items-center rounded-full border border-gray-200 px-3 md:w-[200px] lg:w-[230px]">
                           <p>{dataTugas.status}</p>
                         </div>
                       )}
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <label className="mb-2 font-semibold ">Estimasi</label>
+                    <label className="mb-2 font-semibold ">
+                      Estimasi Pomodoro
+                    </label>
                     {ubahData ? (
                       <input
                         name="estimasi"
@@ -319,9 +321,12 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                         <p>{dataTugas.estimasi}</p>
                       </div>
                     )}
+                    <p className="ml-2 mt-1 text-xs text-orange-500">
+                      *1 Pomodoro = 25 Menit
+                    </p>
                   </div>
                   <div className="flex flex-col">
-                    <label className="mb-2 font-semibold ">Real</label>
+                    <label className="mb-2 font-semibold ">Real Pomodoro</label>
                     {ubahData ? (
                       <input
                         name="real"
@@ -356,7 +361,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                     </button>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between">
+                  <div className="mt-5 flex items-center justify-between">
                     <span
                       onClick={() => {
                         setOpenModal(true);

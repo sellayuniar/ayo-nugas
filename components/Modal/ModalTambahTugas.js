@@ -234,8 +234,8 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col">
-                    <label className="font-semibold">Estimasi</label>
+                  <div className="relative flex flex-col">
+                    <label className="font-semibold ">Estimasi Pomodoro</label>
                     <input
                       name="estimasi"
                       type="number"
@@ -245,9 +245,15 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
                       onChange={handleChange}
                       required
                     />
+                    <p className="ml-2 mt-1 text-xs text-orange-500">
+                      *1 Pomodoro = 25 Menit
+                    </p>
                   </div>
                   <div className="flex flex-col">
-                    <label className="font-semibold">Real</label>
+                    <label className="cursor-pointer font-semibold ">
+                      Real Pomodoro
+                    </label>
+
                     <input
                       name="real"
                       type="number"
