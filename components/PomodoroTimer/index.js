@@ -233,32 +233,32 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         <span
           className={`${
             mode === "pomodoro" && "text-xl font-bold text-[#F05050]"
-          } mx-5`}
+          } mx-5 flex flex-row-reverse items-center`}
         >
-          <h2 className="hidden md:block">Pomodoro</h2>
-          <span className={`block h-8 w-8 md:hidden`}>
+          <h2 className="mx-1 hidden md:block">Pomodoro</h2>
+          <span className={`block h-8 w-8`}>
             {mode === "pomodoro" ? <Fire color="#F05050" /> : <Fire />}
           </span>
         </span>
         <span
           className={`${
             mode === "istirahat-pendek" && "text-xl font-bold text-[#F05050]"
-          } mx-10`}
+          } mx-10 flex flex-row-reverse items-center`}
         >
-          <h2 className="hidden md:block">Istirahat Pendek</h2>
-          <span className="block h-8 w-8 md:hidden">
-            {mode === "istirahat-pendek" ? <Mug color="#F05050" /> : <Mug />}
+          <h2 className="mx-1 hidden md:block">Istirahat Pendek</h2>
+          <span className="block h-8 w-8">
+            {mode === "istirahat-pendek" ? <Mug color="true" /> : <Mug />}
           </span>
         </span>
         <span
           className={`${
             mode === "istirahat-panjang" && "text-xl font-bold text-[#F05050]"
-          } mx-5`}
+          } mx-5 flex flex-row-reverse items-center`}
         >
-          <h2 className="hidden md:block">Istirahat Panjang</h2>
-          <span className="block h-8 w-8 md:hidden">
+          <h2 className="mx-1 hidden md:block">Istirahat Panjang</h2>
+          <span className="block h-8 w-8">
             {mode === "istirahat-panjang" ? (
-              <Relaxed color="#F05050" />
+              <Relaxed color="true" />
             ) : (
               <Relaxed />
             )}

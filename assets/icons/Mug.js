@@ -6,7 +6,8 @@ const Mug = ({ color }) => {
       xmlns="http://www.w3.org/2000/svg"
       height="1.5em"
       viewBox="0 0 512 512"
-      stroke={color ? color : "#404040"}
+      stroke={color ? "#F05050" : "#404040"}
+      fill={color ? "#F05050" : "#404040"}
     >
       {/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
 
