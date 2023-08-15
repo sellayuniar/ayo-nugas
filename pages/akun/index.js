@@ -72,7 +72,7 @@ const Akun = () => {
       data.npm?.toString().toLowerCase().includes(npmUser)
     );
 
-    if (searchNPM.length >= 1 && dataUser.NPM !== allUser[0].npm) {
+    if (searchNPM.length >= 1 && dataUser.NPM === allUser[0].npm) {
       setOpenModal(true);
       setErrMsg("Npm telah terpakai!");
       isValid = false;
