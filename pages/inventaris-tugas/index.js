@@ -14,6 +14,7 @@ import CloseBtn from "@/assets/icons/CloseBtn";
 import PrevArrow from "@/assets/icons/PrevArrow";
 import AfterArrow from "@/assets/icons/AfterArrow";
 import styles from "./index.module.css";
+import { formatDateWithFullDay } from "@/utils/dateUtils";
 
 const InventarisTugas = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -137,7 +138,7 @@ const InventarisTugas = () => {
                     className="text-md cursor-pointer font-semibold text-[#EE3D3D]"
                   >
                     {selectedDate
-                      ? formatDate(selectedDate)
+                      ? formatDateWithFullDay(selectedDate)
                       : "Saring Berdasarkan Tanggal"}
                   </label>
                 </div>
