@@ -58,7 +58,6 @@ const TotalPomodoro = ({ dataPomodoro = [], dateList }) => {
               return minutes;
             }
 
-            console.log(toHours(hours));
             return `${toHours(hours)} Jam ${toMinutes(hours)} menit`;
           },
         },

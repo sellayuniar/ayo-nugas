@@ -19,6 +19,7 @@ import ModalKonfirmasiUnduh from "@/components/ModalMessage/ModalKonfirmasiUnduh
 import RangeDate from "@/components/RangeDate";
 import Download from "@/assets/icons/Download";
 import Email from "@/assets/icons/Email";
+import MiniTotalPomodoro from "@/components/MiniCard/MiniTotalPomodoro";
 const Laporan = () => {
   const { state, handleFunctions } = useContext(GlobalContext);
   const { semuaTugas, user } = state;
@@ -62,11 +63,22 @@ const Laporan = () => {
     return sortData;
   };
 
+  const totalWaktuFokus = (totalPomodoro) => {
+    let total = (totalPomodoro * 25) / 60;
+    let totalMinutes = Math.floor(total * 60);
+
+    const hours = Math.floor(totalMinutes / 60);
+
+    const minutes = totalMinutes % 60;
+    return `${hours} Jam ${minutes} Menit`;
+  };
+
   const getTotalPomodoro = () => {
     let total = 0;
     getTugasSelesai().forEach((item) => {
       total += parseInt(item.real);
     });
+
     return total;
   };
 
@@ -129,6 +141,7 @@ const Laporan = () => {
   };
 
   const dateProps = { startDate, setStartDate, endDate, setEndDate };
+  const data = { getTotalPomodoro, totalWaktuFokus, getTotalPomodoroHariIni };
 
   return (
     <Layout>
@@ -162,11 +175,8 @@ const Laporan = () => {
           </div>
 
           <div className="mb-3 mt-10 flex w-full flex-col justify-between md:flex-row">
-            <MiniCard title={"Total Pomodoro"} data={getTotalPomodoro()} />
-            <MiniCard
-              title={"Total Pomodoro Hari ini"}
-              data={getTotalPomodoroHariIni()}
-            />
+            <MiniTotalPomodoro title={"Total Pomodoro"} data={data} />
+            <MiniTotalPomodoro title={"Total Pomodoro Hari ini"} data={data} />
 
             <MiniCard
               title={"Total Tugas Selesai"}

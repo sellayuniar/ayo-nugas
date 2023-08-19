@@ -57,7 +57,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
       nama_lengkap: `${user[0]?.nama_depan} ${user[0]?.nama_belakang}`,
       message_html: `<table>
       <thead>
-        <tr style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D9D9D9">
+        <tr style="border: 2px solid #D9D9D9">
           <th style="width: 200px; text-align: center;">No</th>
           <th style="width: 300px; text-align: left;">Judul</th>
           <th style="width: 300px; text-align: center;">Catatan</th>  
