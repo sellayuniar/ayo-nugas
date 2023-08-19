@@ -98,7 +98,7 @@ const Akun = () => {
               universitas: dataUser.universitas,
               bio: dataUser.bio,
             });
-            setPesan("Data Akun berhasil diperbarui!");
+            setPesan("Data akun berhasil diperbarui!");
             setModalBerhasil(true);
             setUbahData(false);
             setLoading(false);
