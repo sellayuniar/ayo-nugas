@@ -60,7 +60,7 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
         <tr style="border: 2px solid #D9D9D9">
           <th style="width: 200px; text-align: center;">No</th>
           <th style="width: 300px; text-align: left;">Judul</th>
-          <th style="width: 300px; text-align: center;">Catatan</th>  
+          <th style="width: 300px; text-align: left;">Catatan</th>  
           <th style="width: 300px; text-align: center;">Tanggal</th>
           <th style="width: 300px; text-align: center;">Tipe Tugas</th>
           <th style="width: 300px; text-align: center;">Kategori</th>
