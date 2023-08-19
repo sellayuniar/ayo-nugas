@@ -137,6 +137,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
             setOnBreak(false);
             setBreakInterval((breakInterval) => breakInterval + 1);
             setTimeMin(25);
+            setMode("pomodoro");
           }
         }
       }, 1000);
@@ -171,7 +172,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
       setIdTugas("");
       setGetDataStatus(false);
     }
-    setMode("pomodoro");
+
     setDataTugas({
       judul: "",
       catatan: "",
@@ -230,32 +231,38 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
             {timeSec < 10 ? `0${timeSec}` : timeSec}
           </title>
         </Head>
-        <span
-          className={`${
-            mode === "pomodoro" && "text-xl font-bold text-[#F05050]"
-          } mx-5 flex flex-row-reverse items-center`}
-        >
-          <h2 className="mx-1 hidden md:block">Pomodoro</h2>
+        <span className={`mx-5 flex flex-row-reverse items-center`}>
+          <h2
+            className={`${
+              mode === "pomodoro" && " text-[#F05050]"
+            } mx-1 hidden font-semibold text-[#404040] md:block`}
+          >
+            Pomodoro
+          </h2>
           <span className={`block h-8 w-8`}>
             {mode === "pomodoro" ? <Fire color="#F05050" /> : <Fire />}
           </span>
         </span>
-        <span
-          className={`${
-            mode === "istirahat-pendek" && "text-xl font-bold text-[#F05050]"
-          } mx-10 flex flex-row-reverse items-center`}
-        >
-          <h2 className="mx-1 hidden md:block">Istirahat Pendek</h2>
+        <span className={`mx-10 flex flex-row-reverse items-center`}>
+          <h2
+            className={`${
+              mode === "istirahat-pendek" && "text-[#F05050]"
+            } mx-1 hidden font-semibold text-[#404040] md:block`}
+          >
+            Istirahat Pendek
+          </h2>
           <span className="block h-8 w-8">
             {mode === "istirahat-pendek" ? <Mug color="true" /> : <Mug />}
           </span>
         </span>
-        <span
-          className={`${
-            mode === "istirahat-panjang" && "text-xl font-bold text-[#F05050]"
-          } mx-5 flex flex-row-reverse items-center`}
-        >
-          <h2 className="mx-1 hidden md:block">Istirahat Panjang</h2>
+        <span className={`mx-5 flex flex-row-reverse items-center`}>
+          <h2
+            className={`${
+              mode === "istirahat-panjang" && " text-[#F05050]"
+            } mx-1 hidden font-semibold text-[#404040] md:block`}
+          >
+            Istirahat Panjang
+          </h2>
           <span className="block h-8 w-8">
             {mode === "istirahat-panjang" ? (
               <Relaxed color="true" />
@@ -267,11 +274,11 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
       </div>
       <div className="mt-16 flex flex-col items-center justify-center">
         <div className="">
-          <h2 className="text-4xl font-bold">
+          <h2 className="text-6xl font-bold text-[#404040]">
             {timeMin < 10 ? `0${timeMin}` : timeMin}:
             {timeSec < 10 ? `0${timeSec}` : timeSec}
           </h2>
-          <div>
+          <div className="flex items-center justify-center">
             <button className="mx-5 text-xl" onClick={increaseTime}>
               +
             </button>
@@ -311,7 +318,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           )}
         </div>
         <div className="mt-5">
-          <h1>
+          <h1 className="text-md font-semibold text-[#404040]">
             #{dataTugas.judul !== "" ? dataTugas.judul : "Pomodoro"}{" "}
             {workInterval}/
             {dataTugas.estimasi !== "" ? dataTugas.estimasi : "0"}

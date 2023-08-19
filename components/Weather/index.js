@@ -38,8 +38,10 @@ const Weather = () => {
     <>
       {weatherData ? (
         <>
-          <p className="mb-2 text-2xl font-semibold">{weatherData.name}</p>
-          <p className="text-2xl font-semibold">
+          <p className="mb-2 text-2xl font-semibold text-[#404040]">
+            {weatherData.name}
+          </p>
+          <p className="text-2xl font-semibold text-[#404040]">
             {isNaN(Math.ceil(weatherData.main?.temp)) ? (
               <Spinner textColor="#F05050" />
             ) : (
@@ -49,7 +51,7 @@ const Weather = () => {
           </p>
         </>
       ) : (
-        <p className="text-2xl font-semibold">{err}</p>
+        <p className="text-2xl font-semibold text-[#404040]">{err}</p>
       )}
     </>
   );

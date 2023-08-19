@@ -16,8 +16,10 @@ const Clock = () => {
 
   return (
     <>
-      <p className="text-xl font-bold">{getDay}</p>
-      {isClient && <p className="text-3xl font-bold">{getTime}</p>}
+      <p className="text-xl font-bold text-[#404040]">{getDay}</p>
+      {isClient && (
+        <p className="text-3xl font-bold text-[#404040]">{getTime}</p>
+      )}
     </>
   );
 };

@@ -127,7 +127,7 @@ const TugasHariIni = () => {
         <h1 className="text-3xl font-bold text-[#404040]">Tugas Hari ini</h1>
         <div className="mt-10 flex w-full flex-col-reverse lg:flex-row">
           {/* timer */}
-          <div className="mt-5 h-[400px] w-full rounded-lg bg-white p-5 shadow-lg md:h-[350px] lg:mt-0 lg:w-3/4 ">
+          <div className="mt-5 h-[400px] w-full rounded-lg bg-white p-5 shadow-lg md:h-[350px] lg:mt-0 lg:w-3/4">
             <PomodoroTimer propsPomodoroTimer={propsPomodoroTimer} />
           </div>
           <div className="flex flex-col">
