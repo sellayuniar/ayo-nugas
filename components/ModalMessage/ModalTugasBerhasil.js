@@ -38,7 +38,7 @@ export default function ModalTugasBerhasil({ propsModalTugas }) {
         <Modal.Body>
           <div className="flex flex-col items-center justify-center">
             <ImgSukses />
-            <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            <h3 className="my-5 text-lg font-normal text-center text-gray-500 dark:text-gray-400">
               Tugas Berhasil ditambahkan!
             </h3>
             <div className="gap-4">

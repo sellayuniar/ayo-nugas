@@ -26,7 +26,7 @@ export default function ModalGagal({ modalSuksesProps }) {
             <h1 className="my-5 text-lg font-normal text-gray-700 dark:text-gray-400">
               Pendaftaran Sukses
             </h1>
-            <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Selamat akun anda berhasil didaftarkan!
             </h3>
             <div className="gap-4">
