@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { dataSidebarLink } from "@/data/dataSidebarLink";
 import { useRouter } from "next/router";
+import { GlobalContext } from "@/context/GlobalContext";
+import { useContext } from "react";
 
 const style = {
   active: `font-normal mx-4 text-sm text-blue-600`,
@@ -10,9 +12,11 @@ const style = {
 
 const SidebarNavItems = () => {
   const router = useRouter();
+  const { state } = useContext(GlobalContext);
+  const { setIsSidebar } = state;
 
   return (
-    <ul className="mt-6 px-5 lg:px-2">
+    <ul className="mt-6 px-5 lg:px-2" onClick={() => setIsSidebar(false)}>
       <li>
         {dataSidebarLink.map((item) => (
           <Link

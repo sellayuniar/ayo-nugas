@@ -58,6 +58,7 @@ export const GlobalProvider = (props) => {
     setUser,
     isSidebar,
     loading,
+    setIsSidebar,
   };
 
   const handleFunctions = {
