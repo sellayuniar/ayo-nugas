@@ -172,7 +172,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
       setIdTugas("");
       setGetDataStatus(false);
     }
-
+    setMode("pomodoro");
     setDataTugas({
       judul: "",
       catatan: "",
@@ -211,6 +211,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     const tugasDocRef = doc(db, "tugas", idTugas || "");
     await updateDoc(tugasDocRef, {
       real: workInterval,
+      status: "Selesai",
     });
     setFetchStatus(true);
   };
