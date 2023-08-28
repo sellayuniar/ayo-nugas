@@ -292,29 +292,36 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
         <div className="mt-8 flex flex-col items-center md:flex-row">
           {isRunning ? (
             <button
-              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
+              className=" mr-3 rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
               onClick={pauseTimer}
             >
               Berhenti Sebentar
             </button>
+          ) : onPause || onBreak ? (
+            <>
+              <button
+                className="mb-2 rounded-full bg-[#F16464] px-14 py-2 text-white shadow-md hover:bg-[#d63737] md:mr-3"
+                onClick={startTimer}
+              >
+                Mulai
+              </button>
+              <button
+                className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
+                onClick={() =>
+                  dataTugas.judul !== ""
+                    ? setOpenModalBerhenti(true)
+                    : stopTimer()
+                }
+              >
+                Berhenti
+              </button>
+            </>
           ) : (
             <button
               className="mb-2 rounded-full bg-[#F16464] px-14 py-2 text-white shadow-md hover:bg-[#d63737] md:mr-3"
               onClick={startTimer}
             >
               Mulai
-            </button>
-          )}
-          {onPause && (
-            <button
-              className=" rounded-full bg-[#F16464] px-12 py-2 text-white shadow-md hover:bg-[#d63737]"
-              onClick={() =>
-                dataTugas.judul !== ""
-                  ? setOpenModalBerhenti(true)
-                  : stopTimer()
-              }
-            >
-              Berhenti
             </button>
           )}
         </div>
