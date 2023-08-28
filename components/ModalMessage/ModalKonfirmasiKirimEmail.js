@@ -99,8 +99,6 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
     pesan,
   };
 
-  const email = Cookies.get("email");
-
   return (
     <>
       <Modal
@@ -117,7 +115,8 @@ export default function ModalKonfirmasiKirimEmail({ modalPropsEmail }) {
                 Apakah anda yakin ingin mengirim laporan ke email?
               </h3>
               <p className="text-sm text-[#888888]">
-                Detail tugas yang telah dikerjakan dikirimkan ke email {email}
+                Detail tugas yang telah dikerjakan dikirimkan ke email{" "}
+                {user[0]?.email}
               </p>
             </div>
             <div className="mb-5 mt-10 flex justify-between gap-4">
