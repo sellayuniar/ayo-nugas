@@ -122,7 +122,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
           // keep track interval
           if (!onBreak) {
             setWorkInterval((workInterval) => workInterval + 1);
-            if (workInterval > 0 && workInterval % 3 === 0) {
+            if (workInterval > 0 && (workInterval + 1) % 4 === 0) {
               setTimeMin(15);
               setMode("istirahat-panjang");
             } else {
