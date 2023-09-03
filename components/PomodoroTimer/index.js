@@ -167,6 +167,7 @@ const PomodoroTimer = ({ propsPomodoroTimer }) => {
     setTimeSec(0);
     setOnPause(false);
     setWorkInterval(0);
+    setOnBreak(false);
     if (getDataStatus) {
       updatedataTugasEnd();
       setIdTugas("");
