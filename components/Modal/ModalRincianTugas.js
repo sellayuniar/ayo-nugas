@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Modal } from "flowbite-react";
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import { useState, useRef, useEffect } from "react";
 import {
   optionsTipe,
@@ -215,7 +216,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                         <Select
                           id="tipeTugas"
                           value={
-                            dataTugas.tipe === null
+                            dataTugas.tipe === ""
                               ? "pilih tipe"
                               : { value: dataTugas.tipe, label: dataTugas.tipe }
                           }
@@ -240,7 +241,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                     <label className="mb-2 font-semibold">Kategori Tugas</label>
                     <div className="w-full md:w-[200px] lg:w-[230px]">
                       {ubahData ? (
-                        <Select
+                        <CreatableSelect
                           id="kategoriTugas"
                           value={
                             dataTugas.kategori === null
@@ -253,7 +254,7 @@ const ModalUbahTugas = ({ propsRincianTugas }) => {
                           styles={customStyles}
                           options={optionsKategori}
                           components={{ IndicatorSeparator: () => null }}
-                          isSearchable={false}
+                          isSearchable={true}
                           onChange={(e) =>
                             setDataTugas({ ...dataTugas, kategori: e.label })
                           }

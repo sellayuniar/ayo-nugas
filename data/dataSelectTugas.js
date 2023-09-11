@@ -1,8 +1,6 @@
 export const optionsTipe = [
-  { value: "Purposeful", label: "Purposeful" },
-  { value: "Necessary", label: "Necessary" },
-  { value: "Distracting", label: "Distracting" },
-  { value: "Unnecessary", label: "Unnecessary" },
+  { value: "Individu", label: "Individu" },
+  { value: "Kelompok", label: "Kelompok" },
 ];
 
 export const optionsKategori = [

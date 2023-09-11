@@ -1,5 +1,6 @@
 import { Button, Modal } from "flowbite-react";
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import { useState, useRef } from "react";
 import {
   optionsTipe,
@@ -183,7 +184,8 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
                   <div className="flex flex-col">
                     <label className="mb-2 font-semibold">Kategori Tugas</label>
                     <div className="w-full md:w-[200px] lg:w-[230px]">
-                      <Select
+                      
+                      <CreatableSelect
                         id="kategoriTugas"
                         value={
                           dataTugas.kategori === null
@@ -196,7 +198,7 @@ const ModalTambahTugas = ({ propsTambahTugas }) => {
                         styles={customStyles}
                         options={optionsKategori}
                         components={{ IndicatorSeparator: () => null }}
-                        isSearchable={false}
+                        isSearchable={true}
                         onChange={(e) =>
                           setDataTugas({ ...dataTugas, kategori: e.label })
                         }

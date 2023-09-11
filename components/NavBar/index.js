@@ -13,7 +13,7 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="flex md:order-2">
-          <BtnDaftarOutline slug="masuk" namaBtn="masuk" />
+          <BtnDaftarOutline slug="masuk" namaBtn="Masuk" />
         </div>
         <div
           className="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
@@ -31,7 +31,7 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="#tentang"
                 className="block rounded py-2 pl-3 pr-4 text-gray-900  hover:text-[#EE3D3D] md:p-0  md:hover:text-[#EE3D3D] "
               >
                 Tentang
@@ -39,7 +39,7 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="#cara-penggunaan"
                 className="block rounded py-2 pl-3 pr-4 text-gray-900  hover:text-[#EE3D3D] md:p-0  md:hover:text-[#EE3D3D] "
               >
                 Cara Penggunaaan
@@ -47,7 +47,7 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="#fitur"
                 className="block rounded py-2 pl-3 pr-4 text-gray-900  hover:text-[#EE3D3D] md:p-0  md:hover:text-[#EE3D3D] "
               >
                 Fitur

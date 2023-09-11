@@ -72,7 +72,7 @@ export default function Home() {
             <Image src={Time} alt="" height={300} width={300} />
           </div>
         </div>
-        <div className="flex justify-between px-20 py-20">
+        <div className="flex justify-between px-20 py-20" id="cara-penggunaan">
           <div className="hidden h-full xl:block xl:w-2/4 ">
             <ImgWebPomodoro />
           </div>
@@ -83,7 +83,10 @@ export default function Home() {
             <AccordionItems />
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center bg-[#FDECEC] px-20 py-20">
+        <div
+          className="flex flex-col items-center justify-center bg-[#FDECEC] px-20 py-20"
+          id="fitur"
+        >
           <div className="mb-10">
             <h3 className="text-2xl font-semibold">Fitur Utama</h3>
           </div>
